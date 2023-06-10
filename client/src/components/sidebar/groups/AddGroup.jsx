@@ -1,0 +1,133 @@
+import React, { useState } from 'react';
+import SettupavatarGroup from './SettupavatarGroup';
+import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
+import style from '../style.module.scss';
+import clsx from 'clsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { friendRemainingSelector } from '../../../store/selectors';
+import { addGroup, changeFilter } from '../../../store/reducers/contacts.slice';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
+import useScoket from '../../../hooks/useSocket';
+
+function AddGroup({ user }) {
+  const [avatarGroup, setAvatarGroup] = useState(false);
+  const [groupName, setGroupName] = useState('');
+  const [avatarSelected, setAvatarSelected] = useState();
+  const [groupUsers, setGroupUsers] = useState([]);
+  const myFriends = useSelector(friendRemainingSelector);
+  const dispatch = useDispatch();
+
+  const axiosPrivate = useAxiosPrivate();
+
+  const socket = useScoket();
+  // choose contact to group
+  const handleAddFriends = (obj) => {
+    setGroupUsers((prevState) => {
+      if (prevState.some((item) => JSON.stringify(item) === JSON.stringify(obj))) {
+        return prevState.filter((item) => {
+          if (JSON.stringify(item) !== JSON.stringify(obj)) {
+            return item;
+          }
+        });
+      } else {
+        return [...prevState, obj];
+      }
+    });
+  };
+
+  // create group
+  const createGroup = async () => {
+    try {
+      const { data } = await axiosPrivate.post('/createGroup', { name: groupName, avatar: avatarSelected.avatar, groupUsers: groupUsers });
+      socket.current.emit('group-created', { _id: data._id });
+      dispatch(addGroup(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="modal fade" id="addGroupContainer" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="AddGroupContainer" aria-hidden="true">
+      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1 className="modal-title fs-5" id="AddGroupContainer">
+              Tạo Nhóm
+            </h1>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div className="modal-body">
+            <div className="d-flex">
+              {!avatarSelected ? (
+                <div className="btn btn-secondary h-50 mx-3" onClick={() => setAvatarGroup((prevState) => !prevState)}>
+                  <AiOutlineCamera />
+                </div>
+              ) : (
+                <div className="btn" onClick={() => setAvatarGroup((prevState) => !prevState)}>
+                  <img style={{ borderRadius: '50%', width: 70 }} src={avatarSelected.avatar} alt="" />
+                </div>
+              )}
+
+              <div>
+                <input
+                  className={clsx(style.inputNameGroup, 'form-control')}
+                  name="name"
+                  type="text"
+                  placeholder="Nhập tên nhóm"
+                  style={{ border: 'none' }}
+                  onChange={(e) => setGroupName(e.target.value)}
+                />
+                <hr className="mt-0" />
+              </div>
+            </div>
+            <div className="m-auto d-flex" style={{ width: '70%' }}>
+              <div className="mt-2 mr-2">
+                <AiOutlineSearch style={{ fontSize: 25 }} />
+              </div>
+              <div>
+                <input
+                  className={clsx(style.inputNameGroup, 'form-control')}
+                  type="text"
+                  placeholder="Nhập tên người cần tìm"
+                  style={{ border: 'none' }}
+                  onChange={(e) => dispatch(changeFilter(e.target.value))}
+                />
+                <hr className="mt-0" />
+              </div>
+            </div>
+            <div className="mx-3" style={{ height: 400 }}>
+              {myFriends.map((contact) => (
+                <div key={contact._id} className="d-flex my-4 mx-3">
+                  <div className="form-check mt-4">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      onChange={() => {
+                        handleAddFriends({ _id: contact._id });
+                      }}
+                    />
+                  </div>
+                  <div className="mx-3">
+                    <img className={clsx(style.avatarDetail)} src={contact.avatar} alt="" />
+                  </div>
+                  <h5 className="mx-3 d-flex align-items-center">{contact.userName}</h5>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+              Đóng
+            </button>
+            <button type="button" className="btn btn-primary" onClick={() => createGroup()}>
+              Tạo Nhóm
+            </button>
+          </div>
+          {avatarGroup && <SettupavatarGroup setAvatarGroup={setAvatarGroup} avatarSelected={avatarSelected} setAvatarSelected={setAvatarSelected} />}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddGroup;

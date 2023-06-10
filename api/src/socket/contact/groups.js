@@ -1,0 +1,15 @@
+import * as ContactService from '../../service/ContactService';
+
+const groupSocketService = (socket) => {
+    socket.on('group-created', async (msg) => {
+        try {
+            console.log(msg);
+        } catch (error) {
+            console.log(error);
+        }
+        // console.log(msg);
+    });
+    socket.on('add-users-to-group', async (msg) => {});
+    socket.on('leave-group', async (msg) => {});
+};
+export default groupSocketService;
