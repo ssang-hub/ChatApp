@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import style from './style.module.scss';
 
 const VideoCall = () => {
-  const auth = useSelector(authSelector);
+  const authSelect = useSelector(authSelector);
   const peerIdCall = useSelector(peerSelector);
 
   const localVideoRef = useRef(null);
@@ -17,28 +17,23 @@ const VideoCall = () => {
     if (!peerIdCall.id) {
       navigate('/');
     }
-    const peer = new Peer(`DELTA${auth.user._id}MEET`);
+    const peer = new Peer();
     peer.on('open', (id) => {
-      console.log('Peer Connected with ID: ', id);
+      console.log('Connected with Id: ' + id);
       navigator.getUserMedia(
         { video: true, audio: true },
         (stream) => {
           localVideoRef.current.srcObject = stream;
+          let call = peer.call(`DELTA${peerIdCall.id}MEET`, stream);
+          call.on('stream', (stream) => {
+            remoteVideoRef.current.srcObject = stream;
+          });
         },
         (err) => {
           console.log(err);
         },
       );
     });
-    peer.on('call', (call) => {
-      call.answer(localVideoRef.current.srcObject);
-      call.on('stream', (stream) => {
-        remoteVideoRef.current.srcObject = stream;
-      });
-    });
-    return () => {
-      peer.destroy();
-    };
   }, []);
 
   return (

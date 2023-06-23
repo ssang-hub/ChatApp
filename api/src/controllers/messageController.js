@@ -21,7 +21,6 @@ const getMessages = async (req, res) => {
                 message: item.message,
             };
         });
-        // console.log(messages);
         // console.log(req.query.p);
         return res.status(200).json(messages.reverse());
     } catch (error) {

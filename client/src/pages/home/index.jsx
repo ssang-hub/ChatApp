@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 import { authSelector, RequestSelector, contactsSelector } from '../../store/selectors';
 import { login } from '../../store/reducers/auth.slice';
 import { receiverRequest } from '../../store/reducers/friendRequest.slice';
+import { updatePeerIDCall } from '../../store/reducers/peer.slice';
 import { updateNewRecentContacts } from '../../store/reducers/contacts.slice';
 
 import WellCome from '../../components/wellcome';
@@ -14,7 +15,6 @@ import ChatContainer from '../../components/chatContainer';
 import Nav from '../../components/nav';
 import Sidebar from '../../components/sidebar';
 import ChatInput from '../../components/chatInput';
-import VideoCall from '../../components/videoCall';
 import VideoChatNotify from '../../components/videoCall/videoChatNotify';
 
 function Home() {
@@ -25,6 +25,7 @@ function Home() {
 
   const [OptionNav, setOptionNav] = useState('chat');
   const [chatVideoNotify, setChatVideoNotify] = useState(false);
+  const [messagesLoading, setMessagesLoading] = useState(false);
 
   // socket
   const socket = useRef(io(process.env.REACT_APP_SERVER));
@@ -55,7 +56,8 @@ function Home() {
         console.log(chatRoom);
       });
       socket.current.on('receive-video-call', (call) => {
-        console.log(call);
+        console.log('callID', call.Callfrom._id);
+        dispatch(updatePeerIDCall(call.Callfrom._id));
         setChatVideoNotify(call);
       });
       socket.current.on('image-receive', (msg) => {
@@ -97,7 +99,7 @@ function Home() {
 
     // dispatch(updateNewRecentContacts({ data: newContacts }));
   };
-  console.log(contacts);
+  // console.log(contacts);
   return (
     <div>
       {authSelect.isAuthenticated && (
@@ -105,7 +107,7 @@ function Home() {
           <Nav OptionNav={OptionNav} setOptionNav={setOptionNav} user={authSelect.user} />
           <hr />
 
-          <Sidebar setChatCurrent={setChatCurrent} OptionNav={OptionNav} user={authSelect.user} setMessages={setMessagesChatCurrent} />
+          <Sidebar setChatCurrent={setChatCurrent} setMessagesLoading={setMessagesLoading} OptionNav={OptionNav} user={authSelect.user} setMessages={setMessagesChatCurrent} />
 
           {chatCurrent ? (
             <div style={{ width: '100%' }}>
@@ -117,6 +119,7 @@ function Home() {
                   messages={messagesChatCurrent}
                   setMessages={setMessagesChatCurrent}
                   user={authSelect.user}
+                  messagesLoading={messagesLoading}
                 />
               </div>
               <div style={{ height: '11%' }}>
@@ -128,14 +131,13 @@ function Home() {
                   setMessagesChatCurrent={setMessagesChatCurrent}
                 />
               </div>
-              <VideoCall />
             </div>
           ) : (
             <WellCome />
           )}
           {chatVideoNotify && (
             <div>
-              <VideoChatNotify chatVideoNotifydata={chatVideoNotify} socketCurrent={socket.current} />
+              <VideoChatNotify chatVideoNotifydata={chatVideoNotify} socketCurrent={socket.current} fromSelf={false} setChatVideoNotify={setChatVideoNotify} />
               <div className="modal-backdrop fade show"></div>
             </div>
           )}

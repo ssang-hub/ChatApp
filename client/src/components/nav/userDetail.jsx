@@ -4,12 +4,17 @@ import { AiOutlineCamera } from 'react-icons/ai';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import style from './style.module.scss';
 import clsx from 'clsx';
+import { updateUser } from '../../store/reducers/auth.slice';
+import { useDispatch } from 'react-redux';
+
 function UserDetail({ userDetail, setUserDetail }) {
   const [changeOption, setChangeOption] = useState(false);
   const [changeMyProfile, setChangeMyProfile] = useState();
   const axiosPrivate = useAxiosPrivate();
+
+  const dispatch = useDispatch();
+
   const changeInfomation = (event) => {
-    // console.log(myProfile);
     setChangeMyProfile((prevState) => {
       return { ...prevState, [event.target.name]: event.target.value };
     });
@@ -19,7 +24,8 @@ function UserDetail({ userDetail, setUserDetail }) {
       const result = await axiosPrivate.put('/updateMyProfile', { changeMyProfile });
       setUserDetail(result.data);
       setChangeMyProfile(result.data);
-      console.log(result.data);
+      dispatch(updateUser(result.data));
+      // console.log(result.data);
       setChangeOption(false);
     } catch (error) {
       console.log(error);

@@ -10,7 +10,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFriends, setRecentContacts } from '../../store/reducers/contacts.slice';
 import { contactSearchSelector } from '../../store/selectors';
-function Sidebar({ setChatCurrent, OptionNav, user, setMessages }) {
+function Sidebar({ setChatCurrent, OptionNav, user, setMessages, setMessagesLoading }) {
   // const [myFriends, setMyFriends] = useState([]);
 
   const dispatch = useDispatch();
@@ -32,9 +32,9 @@ function Sidebar({ setChatCurrent, OptionNav, user, setMessages }) {
   }, []);
 
   return (
-    <div className="border-end border-secondary" style={{ maxWidth: '18%' }}>
+    <div className="border-end border-secondary scrollbar-primary" style={{ maxWidth: '18%', overflow: 'auto', height: '100%' }}>
       <Header dispatch={dispatch} />
-      {OptionNav === 'chat' && <Contact setChatCurrent={setChatCurrent} myContacts={myContacts} setMessages={setMessages} />}
+      {OptionNav === 'chat' && <Contact setChatCurrent={setChatCurrent} setMessagesLoading={setMessagesLoading} myContacts={myContacts} setMessages={setMessages} />}
       {OptionNav === 'friend' && <FriendRequest />}
       {OptionNav === 'notify' && <Notify />}
       {OptionNav === 'setting' && <Setting />}

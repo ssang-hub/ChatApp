@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import EmojiPicker from 'emoji-picker-react';
 import useSocket from '../../hooks/useSocket';
 import { BsImage, BsEmojiSmile, BsExclamationLg } from 'react-icons/bs';
-import { GrAttachment } from 'react-icons/gr';
+import { ImAttachment } from 'react-icons/im';
 import { FcLike } from 'react-icons/fc';
 import { TfiThemifyFavicon } from 'react-icons/tfi';
 import { TbBrandTelegram } from 'react-icons/tb';
@@ -11,6 +11,8 @@ import style from './style.module.scss';
 import { useState } from 'react';
 function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCurrent }) {
   const [showEnojiPicker, setShowEmojiPicker] = useState(false);
+  const [showEnojiPicker2, setShowEmojiPicker2] = useState(false);
+
   const [messageInput, setMessageInput] = useState('');
   const [imgaeSend, setImgaeSend] = useState(null);
 
@@ -60,7 +62,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
         <div className={clsx(style.inputV2, 'chat-input-v2', 'd-flex', 'px-4', 'py-1')}>
           <div>
             <label htmlFor="image-input">
-              <div className="btn text-light">
+              <div className="btn text-light mx-2">
                 <BsImage />
               </div>
             </label>
@@ -74,18 +76,28 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
               }}
             />
           </div>
-          <div className="btn text-light" style={{ color: 'white' }}>
-            <GrAttachment />
+          <div className="btn text-light mx-2">
+            <ImAttachment />
           </div>
-          <div className="btn text-light">
+          <div className="btn text-light mx-2">
             <TfiThemifyFavicon />
           </div>
-          <div className="btn text-light">
+          <div className="btn text-light mx-2">
             <BsExclamationLg />
           </div>
-          <div className="btn text-light">
+          <div
+            className="btn text-light mx-2"
+            onClick={() => {
+              setShowEmojiPicker2((prevState) => !prevState);
+            }}
+          >
             <BsEmojiSmile />
           </div>
+          {showEnojiPicker2 && (
+            <div className="position-absolute" style={{ bottom: '10%', left: '35%' }}>
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
         </div>
         {/* <hr style={{ margin: 0 }} /> */}
         <div className="input-group mb-3 position-relative" style={{ backgroundColor: '#19123b', padding: 6 }}>

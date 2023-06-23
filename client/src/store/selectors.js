@@ -23,14 +23,18 @@ export const friendRemainingSelector = (state) => {
   });
 };
 
+export const peerSelector = (state) => state.peer;
+
 export const contactSearchSelector = (state) => {
   const recent = state.contacts.recent;
   if (state.contacts.sidebarFilter === '') {
     return recent;
   }
   return recent.filter((item) => {
-    if (item.contact) {
+    if (item.contact.userName) {
       if (item.contact.userName.includes(state.contacts.sidebarFilter)) return item;
+    } else if (item.contact.name) {
+      if (item.contact.name.includes(state.contacts.sidebarFilter)) return item;
     } else if (item.name.includes(state.contacts.sidebarFilter)) return item;
   });
 };

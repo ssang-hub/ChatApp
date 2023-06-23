@@ -1,17 +1,22 @@
 import dotenv from 'dotenv';
 import groupModel from '../models/groupModel';
+import ContactModel from '../models/ContactModel';
 dotenv.config();
 
 const createGroup = async (req, res) => {
     const group = {
         name: req.body.name,
-        admin: req.user._id,
-        groupUsers: req.body.groupUsers,
+        admin: { _id: req.user._id },
+        groupUsers: [...req.body.groupUsers, { _id: req.user._id }],
         avatar: req.body.avatar,
     };
     try {
         const groupCreate = await groupModel.createGroup(group);
         const { __v0, ...myGroup } = groupCreate.toJSON();
+        // add contact
+        await ContactModel.createContactGroup(group.groupUsers, myGroup._id);
+        // emit request
+        // response
         return res.status(200).json(myGroup);
     } catch (error) {
         console.log(error);

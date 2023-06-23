@@ -44,6 +44,17 @@ Contact.statics = {
             .skip(0)
             .limit(10);
     },
+    createContactGroup(groupUsers, groupId) {
+        const newContacts = groupUsers.map((item) => {
+            return {
+                from: item,
+                to: groupId,
+                content: 'Bạn đã được thêm vào nhóm',
+                updateAt: Date.now(),
+            };
+        });
+        this.create(newContacts);
+    },
 };
 
 export default mongoose.model('contacts', Contact);

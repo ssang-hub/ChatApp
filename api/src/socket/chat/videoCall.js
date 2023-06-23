@@ -14,11 +14,13 @@ const videoChat = (socket) => {
         }
     });
 
-    socket.on('accept-video-call', (roomId) => {
-        socket.join(roomId);
+    socket.on('accept-video-call', (AccountCall) => {
+        // socket.join(roomId);
+        socket.to(AccountCall.data.roomId).emit('accept-call-from-receiver', { accept: true });
     });
-    socket.on('refuse-video-call', (IdAccountCall) => {
-        socket.leave();
+    socket.on('refuse-video-call', (AccountCall) => {
+        // socket.leave();
+        socket.to(AccountCall.data.roomId).emit('refused-call-from-receiver', { refused: true });
     });
     socket.on('leave-video-call', (IdAccountCall) => {
         socket.leave();

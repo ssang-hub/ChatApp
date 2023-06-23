@@ -1,6 +1,7 @@
 import userModel from '../models/userModel';
 import friendRequestModel from '../models/friendRequestModel';
 import ContactModel from '../models/ContactModel';
+import groupModel from '../models/groupModel';
 // import { mailVerify } from './authController';
 
 // Create new Group Chat
@@ -58,13 +59,13 @@ const searchUser = async (req, res) => {
 const updateMyProfile = async (req, res) => {
     // console.log("ok");
     try {
-        let data = req.body.myProfile;
+        const { changeMyProfile } = req.body;
+        const result = await userModel.findOneAndUpdate({ _id: req.user._id }, changeMyProfile, {
+            new: true,
+            projection: '_id userName DOB gender phone address avatar coverAvatar',
+        });
 
-        const result = await userModel.findOneAndUpdate({ _id: req.user._id }, data);
-        const newUser = { ...result._doc, ...data };
-        // console.log(newUser);
-        res.status(200).json(newUser);
-        // console.log('ok');
+        res.status(200).json(result.toJSON());
     } catch (error) {
         console.log(error);
     }
@@ -128,6 +129,8 @@ const getContacts = async (req, res) => {
             }
             return item.from.toString();
         });
+
+        const groups = await groupModel.findGroupInArray(userIds);
         const { users, friends } = await userModel.findUsers(userIds, req.user._id);
         const usersData = users.map((user) => {
             const userDetail = user.toJSON();
@@ -143,17 +146,20 @@ const getContacts = async (req, res) => {
                 updateAt: contact.updateAt,
                 fromSelf: true,
             };
-            if (contact.from.toString() === req.user._id.toString()) {
+            // if recent messages from reqUser => return contact User
+            if (
+                contact.from.toString() === req.user._id.toString() &&
+                usersData.some((user) => user._id.toString() === contact.to.toString())
+            ) {
                 contactObject.contact = usersData.find((user) => user._id.toString() === contact.to.toString());
-                return contactObject;
+            } else if (usersData.some((user) => user._id.toString() === contact.from.toString())) {
+                contactObject.contact = usersData.find((user) => user._id.toString() === contact.from.toString());
+            } else {
+                contactObject.contact = groups.find((group) => group._id.toString() === contact.to.toString());
             }
-            contactObject.contact = usersData.find((user) => user._id.toString() === contact.from.toString());
             return contactObject;
         });
         return res.status(200).json(contacts);
-
-        // console.log(data.reverse());
-        // console.log(data);
     } catch (error) {
         console.log(error);
     }

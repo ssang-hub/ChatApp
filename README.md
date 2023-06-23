@@ -1,6 +1,6 @@
 # Getting Started
 
-This project is a web app for chat app that includes the features: Login/Resgister, add friend, create group, chat realtime.
+This project is a web app for chat app that includes the features: Login/Resgister, add friend, create group, chat realtime, video call.
 
 ## Prerequisites
 

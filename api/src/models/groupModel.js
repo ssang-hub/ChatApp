@@ -30,5 +30,8 @@ groupSchema.statics = {
     getAllGroup(userId) {
         return this.find({ groupUsers: userId });
     },
+    findGroupInArray(groupIds) {
+        return this.find({ _id: { $in: groupIds } });
+    },
 };
 export default mongoose.model('groups', groupSchema);

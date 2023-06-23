@@ -14,6 +14,7 @@ function AddGroup({ user }) {
   const [groupName, setGroupName] = useState('');
   const [avatarSelected, setAvatarSelected] = useState();
   const [groupUsers, setGroupUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const myFriends = useSelector(friendRemainingSelector);
   const dispatch = useDispatch();
 
@@ -38,9 +39,10 @@ function AddGroup({ user }) {
   // create group
   const createGroup = async () => {
     try {
+      setLoading(true);
       const { data } = await axiosPrivate.post('/createGroup', { name: groupName, avatar: avatarSelected.avatar, groupUsers: groupUsers });
       socket.current.emit('group-created', { _id: data._id });
-      dispatch(addGroup(data));
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -119,9 +121,14 @@ function AddGroup({ user }) {
             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
               Đóng
             </button>
-            <button type="button" className="btn btn-primary" onClick={() => createGroup()}>
-              Tạo Nhóm
-            </button>
+
+            {loading ? (
+              <div className="spinner-border text-primary" role="status"></div>
+            ) : (
+              <button type="button" disabled={loading} className="btn btn-primary" onClick={() => createGroup()}>
+                Tạo Nhóm
+              </button>
+            )}
           </div>
           {avatarGroup && <SettupavatarGroup setAvatarGroup={setAvatarGroup} avatarSelected={avatarSelected} setAvatarSelected={setAvatarSelected} />}
         </div>

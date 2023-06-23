@@ -1,15 +1,25 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
 import { AiOutlineUsergroupAdd, AiOutlineSearch, AiOutlineVideoCamera } from 'react-icons/ai';
 import style from './style.module.scss';
 import useScoket from '../../hooks/useSocket';
-import { v4 as uuidv4 } from 'uuid';
+import VideoChatNotify from '../../components/videoCall/videoChatNotify';
+import { useState } from 'react';
+
+import { updatePeerIDCall } from '../../store/reducers/peer.slice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 function Header({ chatCurrent, user }) {
   const socket = useScoket();
-  const [room, setRoom] = useState();
+  const [chatVideoNotify, setchatVideoNotify] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleVideoCall = () => {
-    const roomId = uuidv4();
     socket.current.emit('create-video-chat', { from: user._id, to: chatCurrent._id });
+    dispatch(updatePeerIDCall(chatCurrent._id));
+    navigate('/videoChat');
+    setchatVideoNotify(true);
   };
   return (
     <div className={clsx('d-flex', 'justify-content-between', 'p-3', style.header)}>
@@ -30,6 +40,12 @@ function Header({ chatCurrent, user }) {
           <AiOutlineVideoCamera />
         </div>
       </div>
+      {chatVideoNotify && (
+        <div>
+          <VideoChatNotify chatVideoNotifydata={chatVideoNotify} socketCurrent={socket.current} fromSelf={chatCurrent} setChatVideoNotify={setchatVideoNotify} />
+          <div className="modal-backdrop fade show"></div>
+        </div>
+      )}
     </div>
   );
 }

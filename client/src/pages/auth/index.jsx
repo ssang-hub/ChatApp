@@ -220,8 +220,8 @@ function Auth() {
                     {authOption === 'login' ? (
                       <button type="submit" className={clsx(style.submitBtn, 'btn', 'btn-block', 'btn-primary', 'btn-lg')}>
                         {onLoading ? (
-                          <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                          <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
                           </div>
                         ) : (
                           <small>
@@ -233,8 +233,8 @@ function Auth() {
                     ) : (
                       <button type="submit" className={clsx(style.submitBtn, 'btn', 'btn-block', 'btn-primary', 'btn-lg')}>
                         {onLoading ? (
-                          <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                          <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
                           </div>
                         ) : (
                           <small>

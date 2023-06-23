@@ -2,12 +2,13 @@ import React from 'react';
 import clsx from 'clsx';
 import style from '../style.module.scss';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
-function Contact({ setChatCurrent, myContacts, setMessages }) {
+function Contact({ setChatCurrent, myContacts, setMessages, setMessagesLoading }) {
   const axiosPrivate = useAxiosPrivate();
   // console.log(filterContacts);
   const handleSetChatCurrent = async (chatCurrent) => {
     try {
       setMessages([]);
+      setMessagesLoading(true);
       const getRecentMessages = async () => {
         const getMessages = await axiosPrivate.get(`/getMessages`, { params: { u: chatCurrent._id, p: 0 } });
         setMessages(
@@ -17,6 +18,7 @@ function Contact({ setChatCurrent, myContacts, setMessages }) {
         );
       };
       getRecentMessages();
+      setMessagesLoading(false);
       setChatCurrent(chatCurrent);
     } catch (error) {
       console.log(error);
@@ -30,9 +32,9 @@ function Contact({ setChatCurrent, myContacts, setMessages }) {
             <div>
               <img src={item.contact ? item.contact.avatar : item.avatar} className={style.avatar} alt="" />
             </div>
-            <div className={clsx('text-light', 'd-flex', 'pt-2', 'px-2')}>{item.contact ? item.contact.userName : item.name}</div>
+            <div className={clsx('text-light', 'd-flex', 'pt-2', 'px-2')}>{item.contact ? item.contact.userName || item.contact.name : item.name}</div>
             <div className="text-secondary p-2" style={{ marginLeft: 40 }}>
-              {item.contact && !item.contact.isFriend && 'Người lạ'}
+              {item.contact && !item.contact.isFriend && !item.contact.admin && 'Người lạ'}
             </div>
           </div>
           {item.contact && (

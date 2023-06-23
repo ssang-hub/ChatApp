@@ -3,7 +3,7 @@ import Header from './header';
 // import style from './style.module.scss';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-function ChatContainer({ socketCurrent, chatCurrent, messages, user, setMessages }) {
+function ChatContainer({ socketCurrent, chatCurrent, messages, user, setMessages, messagesLoading }) {
   const myContainerRef = useRef(null);
   const [numberPage, setNumberPage] = useState(0);
   const axiosPrivate = useAxiosPrivate();
@@ -56,7 +56,7 @@ function ChatContainer({ socketCurrent, chatCurrent, messages, user, setMessages
         <Header chatCurrent={chatCurrent} user={user} />
       </div>
       <div ref={myContainerRef} className="content text-light p-4 scrollbar-primary" id="scroll-content" style={{ overflow: 'auto', height: '87%' }}>
-        {messages.length === 0 && <div class="spinner-border text-light" role="status"></div>}
+        {messagesLoading && <div class="spinner-border text-light" role="status"></div>}
         {messages.map((message, index) => (
           <div className="my-2" key={index}>
             {message.fromSelf ? (
