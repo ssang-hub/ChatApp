@@ -33,3 +33,36 @@
   border-bottom: 1px solid white;
   // color: white;
 }
+.sticker-box {
+  position: absolute;
+  bottom: 10%;
+  left: 30%;
+  background-color: white;
+  border-radius: 10%;
+}
+.sticktitle {
+  width: 300px;
+  border-radius: 10%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.stickerImageList {
+  max-width: 70px;
+  max-height: 70px;
+}
+.stickerContainer {
+  width: 350px;
+  height: 300px;
+  border-radius: 10%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+.stickerItemImage {
+  max-width: 100px;
+  max-height: 100px;
+}

@@ -60,8 +60,9 @@ function ChatContainer({ socketCurrent, chatCurrent, messages, user, setMessages
         {messages.map((message, index) => (
           <div className="my-2" key={index}>
             {message.fromSelf ? (
-              <div className="d-flex flex-row justify-content-end">
-                <div>
+              <div className="d-flex flex-row justify-content-end position-relative">
+                <div style={{ marginRight: 35 }}>
+                  {message.message.type === 'sticker' && <img src={message.message.content} style={{ maxHeight: 200, marginLeft: 10 }} />}
                   {message.message.type === 'image' && <img src={message.message.content} style={{ width: 400, marginLeft: 10 }} />}
                   {message.message.type === 'text' && (
                     <p className="small p-3 me-3 mb-1 text-white rounded-3 bg-primary font-size-16" style={{ backgroundColor: '#f5f6f7' }}>
@@ -70,13 +71,17 @@ function ChatContainer({ socketCurrent, chatCurrent, messages, user, setMessages
                   )}
                   <p className="small me-3 mb-3 rounded-3 text-muted">{message.createdAt}</p>
                 </div>
-
-                <img src={user.avatar} alt="avatar 1" style={{ width: 45, height: '100%', borderRadius: '50%' }} />
+                <div className="position-absolute" style={{ bottom: 20 }}>
+                  <img src={user.avatar} alt="avatar 1" style={{ width: 45, height: '100%', borderRadius: '50%' }} />
+                </div>
               </div>
             ) : (
-              <div className="d-flex flex-row justify-content-start">
-                <img src={chatCurrent.avatar} alt="avatar 1" style={{ width: 45, height: '100%', borderRadius: '50%' }} />
-                <div>
+              <div className="d-flex flex-row justify-content-start position-relative">
+                <div className="position-absolute" style={{ bottom: 20 }}>
+                  <img src={chatCurrent.avatar} alt="avatar 1" style={{ width: 45, height: '100%', borderRadius: '50%' }} />
+                </div>
+                <div style={{ marginLeft: 35 }}>
+                  {message.message.type === 'sticker' && <img src={message.message.content} style={{ maxHeight: 200, marginLeft: 10 }} />}
                   {message.message.type === 'image' && <img src={message.message.content} style={{ maxWidth: 400, marginLeft: 10 }} />}
                   {message.message.type === 'text' && (
                     <p className="small p-2 ms-3 mb-1 rounded-3 text-dark" style={{ backgroundColor: '#f5f6f7' }}>

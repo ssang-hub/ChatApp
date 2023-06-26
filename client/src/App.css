@@ -87,7 +87,9 @@ input::-webkit-inner-spin-button {
 label {
   cursor: pointer;
 }
-
+.pointerMouse {
+  cursor: pointer;
+}
 .scrollbar-primary::-webkit-scrollbar {
   width: 12px;
   background-color: #3a3afc;

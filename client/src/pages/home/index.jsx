@@ -46,7 +46,7 @@ function Home() {
       socket.current.emit('accountConnect', jwtDecode(token.accessToken)._id);
       socket.current.on('msg-recieve', (msg) => {
         setArrivalMessages({ fromSelf: false, message: msg.message, from: msg.from });
-        updateContactRecents(msg.from, msg.message.content);
+        // updateContactRecents(msg.from, msg.message.content, false);
       });
       socket.current.on('friend-Request-receive', (msg) => {
         // console.log(msg);
@@ -62,24 +62,17 @@ function Home() {
       });
       socket.current.on('image-receive', (msg) => {
         setArrivalMessages({ fromSelf: authSelect.user._id === msg.from, message: msg.message, from: msg.from });
-        updateContactRecents(msg.from, 'Đã gửi một ảnh');
+        // updateContactRecents(msg.from, 'Đã gửi một ảnh', false);
+      });
+      socket.current.on('sticker-receive', (msg) => {
+        setArrivalMessages({ fromSelf: authSelect.user._id === msg.from, message: msg.message, from: msg.from });
+        // updateContactRecents(msg.from, 'Đã gửi một sticker', false);
       });
       socket.current.on('send-image-success', (msg) => {
         const msgSend = { fromSelf: true, message: msg.message };
         setSendFileMessage(msgSend);
       });
-      //  const getFriends = async () => {
-      //    try {
-      //      const { data } = await axiosPrivate.get('/getContacts');
-      //      dispatch(setRecentContacts(data));
-      //    } catch (error) {
-      //      console.log(error);
-      //    }
-      //  };
-      //  getFriends();
     }
-
-    // console.log(RequestSelect);
   }, []);
   useEffect(() => {
     sendfileMessage && setMessagesChatCurrent((prevState) => [...prevState, sendfileMessage]);
@@ -89,15 +82,11 @@ function Home() {
   }, [arrivalMessages]);
 
   const updateContactRecents = (fromID, content, fromSelf) => {
-    setTimeout(() => {
-      const prevState = contacts.filter((item) => item.contact._id !== fromID);
-      console.log('prevState', prevState);
-      const updateAt = contacts.find((item) => item.contact._id === fromID);
-      const newContacts = [{ ...updateAt, content: content, fromSelf: false }, ...prevState];
-      console.log('new: ', newContacts);
-    }, 0.2);
-
-    // dispatch(updateNewRecentContacts({ data: newContacts }));
+    const prevState = contacts.filter((item) => item.contact._id !== fromID);
+    const updateAt = contacts.find((item) => item.contact._id === fromID);
+    const newContacts = [{ ...updateAt, content: content, fromSelf: fromSelf }, ...prevState];
+    console.log(newContacts);
+    dispatch(updateNewRecentContacts(newContacts));
   };
   // console.log(contacts);
   return (

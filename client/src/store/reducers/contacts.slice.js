@@ -14,8 +14,7 @@ const Contacts = createSlice({
       state.recent = action.payload;
     },
     updateNewRecentContacts: (state, action) => {
-      console.log('data', action.payload.data);
-      // state.recent = action.payload.data;
+      state.recent = action.payload;
     },
     setFriends: (state, action) => {
       state.friends = action.payload;

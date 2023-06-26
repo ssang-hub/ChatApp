@@ -13,7 +13,6 @@ function FriendRequest() {
       try {
         const respones = await axiosPrivate.get('/Request', { params: { p: 1 } });
         setRequests(respones.data);
-        console.log(respones.data);
         return respones.data;
       } catch (error) {
         console.log(error);

@@ -8,5 +8,14 @@ const chatText = (socket) => {
         }
         console.log('message');
     });
+    socket.on('send-sticker', async (data) => {
+        const sendUserSocket = onlineUsers.get(data.to);
+        const { content, ...newMessage } = data;
+        newMessage.message = { type: 'sticker', content: content };
+        const msg = await messageService.addMessage(newMessage);
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit('sticker-receive', msg);
+        }
+    });
 };
 export default chatText;

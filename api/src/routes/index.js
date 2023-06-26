@@ -16,5 +16,4 @@ import multer from 'multer';
 
 route.use(authRoute);
 route.use(passport.authenticate('jwt', { session: false }), user);
-
 export default route;

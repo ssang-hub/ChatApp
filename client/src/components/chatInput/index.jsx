@@ -1,17 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import EmojiPicker from 'emoji-picker-react';
 import useSocket from '../../hooks/useSocket';
-import { BsImage, BsEmojiSmile, BsExclamationLg } from 'react-icons/bs';
-import { ImAttachment } from 'react-icons/im';
+import { BsEmojiSmile } from 'react-icons/bs';
 import { FcLike } from 'react-icons/fc';
-import { TfiThemifyFavicon } from 'react-icons/tfi';
 import { TbBrandTelegram } from 'react-icons/tb';
 import style from './style.module.scss';
-import { useState } from 'react';
+import ChatInputSecond from './chatInputSecond';
 function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCurrent }) {
   const [showEnojiPicker, setShowEmojiPicker] = useState(false);
-  const [showEnojiPicker2, setShowEmojiPicker2] = useState(false);
 
   const [messageInput, setMessageInput] = useState('');
   const [imgaeSend, setImgaeSend] = useState(null);
@@ -22,7 +19,6 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
     if (imgaeSend) {
       socket.current.emit('send-image', { from: user._id, to: chatCurrent._id, content: imgaeSend });
       updateContactRecents(chatCurrent._id, 'Đã gửi một ảnh', true);
-
       // setImgaeSend(undefined);
       return () => {
         setImgaeSend(undefined);
@@ -38,6 +34,13 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
     message += EmojiClickData.emoji;
     setMessageInput(message);
   };
+
+  const sendSticker = (stickerItem) => {
+    socket.current.emit('send-sticker', { from: user._id, to: chatCurrent._id, content: stickerItem.url });
+    updateContactRecents(chatCurrent._id, 'Đã gửi một Sticker', true);
+    setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'sticker', content: stickerItem.url } }]);
+  };
+
   const sendTextChat = (event) => {
     event.preventDefault();
 
@@ -48,8 +51,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
         to: chatCurrent._id,
       };
       socket.current.emit('send-msg', message);
-      const msgSend = { fromSelf: true, message: { type: 'text', content: messageInput } };
-      setMessagesChatCurrent((prevState) => [...prevState, msgSend]);
+      setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'text', content: messageInput } }]);
       updateContactRecents(chatCurrent._id, messageInput, true);
       setMessageInput('');
     }
@@ -59,46 +61,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
   return (
     <div className="" style={{ width: '100%' }}>
       <div>
-        <div className={clsx(style.inputV2, 'chat-input-v2', 'd-flex', 'px-4', 'py-1')}>
-          <div>
-            <label htmlFor="image-input">
-              <div className="btn text-light mx-2">
-                <BsImage />
-              </div>
-            </label>
-            <input
-              type="file"
-              name="image"
-              id="image-input"
-              onChange={(e) => {
-                // console.log(123);
-                setImgaeSend(e.target.files[0]);
-              }}
-            />
-          </div>
-          <div className="btn text-light mx-2">
-            <ImAttachment />
-          </div>
-          <div className="btn text-light mx-2">
-            <TfiThemifyFavicon />
-          </div>
-          <div className="btn text-light mx-2">
-            <BsExclamationLg />
-          </div>
-          <div
-            className="btn text-light mx-2"
-            onClick={() => {
-              setShowEmojiPicker2((prevState) => !prevState);
-            }}
-          >
-            <BsEmojiSmile />
-          </div>
-          {showEnojiPicker2 && (
-            <div className="position-absolute" style={{ bottom: '10%', left: '35%' }}>
-              <EmojiPicker onEmojiClick={handleEmojiClick} />
-            </div>
-          )}
-        </div>
+        <ChatInputSecond setImgaeSend={setImgaeSend} handleEmojiClick={handleEmojiClick} sendSticker={sendSticker} />
         {/* <hr style={{ margin: 0 }} /> */}
         <div className="input-group mb-3 position-relative" style={{ backgroundColor: '#19123b', padding: 6 }}>
           <form onSubmit={sendTextChat} id="form-input" className="w-100 d-flex">
@@ -119,7 +82,12 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
             >
               <BsEmojiSmile />
             </div>
-            <div className={clsx('btn', 'px-3', style.btnInput, 'font-size-25')} onClick>
+            <div
+              className={clsx('btn', 'px-3', style.btnInput, 'font-size-25')}
+              onClick={() => {
+                sendSticker({ url: 'https://media.tenor.com/iJk3187_NpgAAAAi/heart.gif' });
+              }}
+            >
               <FcLike />
             </div>
             <button type="submit" form="form-input" className={clsx('btn', 'px-3', style.btnSubmit, 'font-size-25')}>
