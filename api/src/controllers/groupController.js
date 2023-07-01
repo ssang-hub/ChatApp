@@ -4,23 +4,20 @@ import ContactModel from '../models/ContactModel';
 dotenv.config();
 
 const createGroup = async (req, res) => {
-    const group = {
+    const groupRequset = {
         name: req.body.name,
         admin: { _id: req.user._id },
         groupUsers: [...req.body.groupUsers, { _id: req.user._id }],
-        avatar: req.body.avatar,
     };
+    const newGroup = req.body.avatar ? { ...groupRequset, avatar: req.body.avatar } : groupRequset;
     try {
-        const groupCreate = await groupModel.createGroup(group);
+        const groupCreate = await groupModel.createGroup(newGroup);
         const { __v0, ...myGroup } = groupCreate.toJSON();
         // add contact
-        await ContactModel.createContactGroup(group.groupUsers, myGroup._id);
-        // emit request
-        // response
+        await ContactModel.createContactGroup(newGroup.groupUsers, myGroup._id);
         return res.status(200).json(myGroup);
     } catch (error) {
-        console.log(error);
-        // res.json('false');
+        return res.status(400).json('crete group failed');
     }
 };
 
@@ -37,16 +34,6 @@ const addUsersToGroup = async (req, res) => {
     }
 };
 
-const getAllGroup = async (req, res) => {
-    try {
-        const result = await groupModel.getAllGroup(req.user._id);
-        console.log(result);
-        return res.status(200).json(result);
-    } catch (error) {
-        return res.status(403).json('not found');
-    }
-};
-
 const leaveGroup = async (req, res) => {
     try {
         await groupModel.leaveGroup(req.user._id, req.body.groupId);
@@ -55,7 +42,13 @@ const leaveGroup = async (req, res) => {
         return res.status(403).json('not found');
     }
 };
-
+const getUsersInGroup = async (req, res) => {
+    try {
+        // const groupUsers = await groupModel.
+    } catch (error) {
+        return res.status(403).json('not found');
+    }
+};
 const getCustomAvatarGroup = (req, res) => {
     const avatars = [];
     for (let i = 0; i < 12; i++) {
@@ -63,4 +56,4 @@ const getCustomAvatarGroup = (req, res) => {
     }
     return res.status(200).json(avatars);
 };
-export { getCustomAvatarGroup, getAllGroup, addUsersToGroup, createGroup, leaveGroup };
+export { getCustomAvatarGroup, addUsersToGroup, createGroup, leaveGroup, getUsersInGroup };

@@ -10,7 +10,7 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import useScoket from '../../../hooks/useSocket';
 
 function AddGroup({ user }) {
-  const [avatarGroup, setAvatarGroup] = useState(false);
+  const [selectAvatarGroup, setSelectAvatarGroup] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [avatarSelected, setAvatarSelected] = useState();
   const [groupUsers, setGroupUsers] = useState([]);
@@ -40,7 +40,7 @@ function AddGroup({ user }) {
   const createGroup = async () => {
     try {
       setLoading(true);
-      const { data } = await axiosPrivate.post('/createGroup', { name: groupName, avatar: avatarSelected.avatar, groupUsers: groupUsers });
+      const { data } = await axiosPrivate.post('/createGroup', { name: groupName, avatar: avatarSelected, groupUsers: groupUsers });
       socket.current.emit('group-created', { _id: data._id });
       window.location.reload();
     } catch (error) {
@@ -61,12 +61,12 @@ function AddGroup({ user }) {
           <div className="modal-body">
             <div className="d-flex">
               {!avatarSelected ? (
-                <div className="btn btn-secondary h-50 mx-3" onClick={() => setAvatarGroup((prevState) => !prevState)}>
+                <div className="btn btn-secondary h-50 mx-3" onClick={() => setSelectAvatarGroup((prevState) => !prevState)}>
                   <AiOutlineCamera />
                 </div>
               ) : (
-                <div className="btn" onClick={() => setAvatarGroup((prevState) => !prevState)}>
-                  <img style={{ borderRadius: '50%', width: 70 }} src={avatarSelected.avatar} alt="" />
+                <div className="btn" onClick={() => setSelectAvatarGroup((prevState) => !prevState)}>
+                  <img style={{ borderRadius: '50%', width: 70 }} src={avatarSelected} alt="" />
                 </div>
               )}
 
@@ -130,7 +130,7 @@ function AddGroup({ user }) {
               </button>
             )}
           </div>
-          {avatarGroup && <SettupavatarGroup setAvatarGroup={setAvatarGroup} avatarSelected={avatarSelected} setAvatarSelected={setAvatarSelected} />}
+          {selectAvatarGroup && <SettupavatarGroup setSelectAvatarGroup={setSelectAvatarGroup} avatarSelected={avatarSelected} setAvatarSelected={setAvatarSelected} />}
         </div>
       </div>
     </div>

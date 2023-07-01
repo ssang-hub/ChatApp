@@ -13,7 +13,8 @@ const googleVerify = async (req, res, next) => {
         const { accessToken, refreshToken } = authJWT.createNewToken(checkUser);
         return res.status(200).json({ accessToken, refreshToken });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
+        return res.status(408).json('request timeout');
     }
 };
 

@@ -18,7 +18,7 @@ git clone  https://github.com/ssang-hub/ChatApp.git <project_name>
 
 ```
 cd <project_name>
-cd server
+cd api
 npm install
 ```
 

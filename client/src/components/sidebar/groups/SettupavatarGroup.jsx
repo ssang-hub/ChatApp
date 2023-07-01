@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import clsx from 'clsx';
 import style from '../style.module.scss';
-function SettupavatarGroup({ setAvatarGroup, avatarSelected, setAvatarSelected }) {
+function SettupavatarGroup({ setSelectAvatarGroup, avatarSelected, setAvatarSelected }) {
   const [DefaultAvatarGroup, setDefaultAvatarGroup] = useState([]);
   const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
@@ -28,7 +28,7 @@ function SettupavatarGroup({ setAvatarGroup, avatarSelected, setAvatarSelected }
           <div className="modal-body">
             <div className="row">
               {DefaultAvatarGroup.map((image, index) => (
-                <div className={clsx('col-3', 'mt-2')} key={index} onClick={() => setAvatarSelected(image)}>
+                <div className={clsx('col-3', 'mt-2')} key={index} onClick={() => setAvatarSelected(image.avatar)}>
                   <img className={clsx({ [style['defaultAvatarSelected']]: avatarSelected === image }, 'w-100')} style={{ borderRadius: '50%' }} src={image.avatar} alt="" />
                 </div>
               ))}
@@ -38,7 +38,7 @@ function SettupavatarGroup({ setAvatarGroup, avatarSelected, setAvatarSelected }
             <button
               className="btn btn-secondary"
               onClick={() => {
-                setAvatarGroup(false);
+                setSelectAvatarGroup(false);
               }}
             >
               Hủy
@@ -47,7 +47,7 @@ function SettupavatarGroup({ setAvatarGroup, avatarSelected, setAvatarSelected }
               type="button"
               className="btn btn-primary"
               onClick={() => {
-                setAvatarGroup(false);
+                setSelectAvatarGroup(false);
               }}
             >
               Chọn ảnh

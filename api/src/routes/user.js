@@ -13,6 +13,8 @@ const route = express.Router();
 // message api
 // route.post("/getAllMessages", messageController.getAllMessages);
 route.get('/getMessages', messageController.getMessages);
+route.get('/getGroupMessages', messageController.getGroupMessages);
+
 // route.post('/addMessage', messageController.addMessage);
 
 // route.post("/removeMessage", messageController.removeMessage);
@@ -29,7 +31,7 @@ route.get('/getAllFriend', userController.getAllFriend);
 
 // group controller
 route.post('/createGroup', groupController.createGroup);
-route.get('/getAllGroup', groupController.getAllGroup);
+route.get('/getUsersInGroup', groupController.getUsersInGroup);
 route.get('/getAllCustomAvatarGroup', groupController.getCustomAvatarGroup);
 route.post('/addUsersToGroup', groupController.addUsersToGroup);
 route.post('/leaveGroup', groupController.leaveGroup);

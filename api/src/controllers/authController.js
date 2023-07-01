@@ -76,14 +76,14 @@ const login = async (req, res, next) => {
             return res.status(403).json('Tài khoản mật khẩu không chính xác');
         }
     } catch (error) {
-        console.log(error);
+        return res.status(403).json('Tài khoản mật khẩu không chính xác');
     }
 };
 const logout = async (req, res) => {
     try {
         refreshTokenModel.findAndDeleteRefreshToken(req.body.token);
     } catch (error) {
-        console.log(error);
+        return res.status(400).json('Logout failed');
     }
 };
 
@@ -92,7 +92,7 @@ const refreshToken = async (req, res) => {
     try {
         const { accessToken, refreshToken } = await authJWT.createNewToken(user);
         // refreshTokenModel.findOneAndUpdate({info: req.headers.Authorization})
-        return res.json({ accessToken, refreshToken });
+        return res.status(200).json({ accessToken, refreshToken });
     } catch (error) {
         console.log(error);
     }
@@ -144,9 +144,9 @@ const verifyRegister = async (req, res) => {
         const data = req.body;
         const result = await pendingUserModel.RegisterVerify(data.pendingUserModel, data.numberCode);
         if (result) {
-            res.status(200).json(true);
+            return res.status(200).json(true);
         } else {
-            res.status(404).json(false);
+            return res.status(404).json(false);
         }
     } catch (error) {
         console.log(error);
@@ -162,12 +162,12 @@ const forgotPassword = async (req, res) => {
         if (checkEmail) {
             await mailVerify(req.body.recoveryEmail, numberCode, 'forgotPassword');
             const user = await pendingUserModel.createUserPedding(checkEmail._id.toString(), numberCode);
-            res.status(200).json(user._id);
+            return res.status(200).json(user._id);
         } else {
-            res.status(403).json(false);
+            return res.status(403).json(false);
         }
     } catch (error) {
-        res.status(403).json(false);
+        return res.status(403).json(false);
     }
 };
 // verify Number Code in email
@@ -175,9 +175,9 @@ const verifyRecoveryPassword = async (req, res) => {
     try {
         const data = req.body.dataRecovery;
         const checkUser = await pendingUserModel.findUserPedding(data.id, data.numberCode);
-        checkUser ? res.status(200).json(true) : res.status(403).json(false);
+        return checkUser ? res.status(200).json(true) : res.status(403).json(false);
     } catch (error) {
-        res.status(403).json(false);
+        return res.status(403).json(false);
     }
 };
 // after user enter NumberCode
@@ -192,7 +192,7 @@ const recoveryPassword = async (req, res) => {
         }
         userModel.updatePassword();
     } catch (error) {
-        res.status(403).json(false);
+        return res.status(403).json(false);
     }
 };
 

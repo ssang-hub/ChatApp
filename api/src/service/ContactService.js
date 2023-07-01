@@ -2,7 +2,7 @@
 import friendRequestModel from '../models/friendRequestModel';
 import ContactModel from '../models/ContactModel';
 import messageModel from '../models/messageModel';
-// import groupModel from '../models/groupModel';
+import groupModel from '../models/groupModel';
 
 const addFriend = async (msg) => {
     try {
@@ -55,4 +55,13 @@ const addGroup = async (req, res) => {
 //         console.log('ERROR:', error);
 //     }
 // };
-export { addFriend };
+const getAllGroup = async (userId) => {
+    try {
+        const groupIds = await groupModel.getAllIdGroup(userId);
+        return groupIds;
+        // return res.status(200).json(result);
+    } catch (error) {
+        // return res.status(403).json('not found');
+    }
+};
+export { addFriend, getAllGroup };

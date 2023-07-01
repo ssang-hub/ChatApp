@@ -24,3 +24,12 @@
   float: right;
   // display: flex;
 }
+
+.stickerSize {
+  max-height: 170px;
+  min-width: 100px;
+}
+.imageSize {
+  max-width: 400px;
+  min-width: 200px;
+}

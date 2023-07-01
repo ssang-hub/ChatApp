@@ -17,10 +17,10 @@ const MessageSchema = mongoose.Schema({
 });
 
 MessageSchema.statics = {
-    getMessages(users, p) {
+    getMessages(users, pagenumber) {
         return this.find({ senderId: { $in: users }, receiverId: { $in: users } })
             .sort({ createdAt: -1 })
-            .skip(p * 15)
+            .skip(pagenumber * 15)
             .limit(15);
     },
     async getAllMessagesGroup(user, groupId) {
@@ -35,6 +35,24 @@ MessageSchema.statics = {
         });
 
         return result.toJSON();
+    },
+    getGroupMessages(groupId, pagenumber) {
+        return this.aggregate([
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'senderId',
+                    foreignField: '_id',
+                    as: 'users',
+                },
+            },
+            { $match: { receiverId: new ObjectId(groupId) } },
+            { $sort: { createdAt: -1 } },
+            { $limit: 15 },
+            { $skip: pagenumber * 15 },
+            { $unwind: '$users' },
+            { $project: { 'users._id': 1, 'users.userName': 1, 'users.avatar': 1, message: 1, createdAt: 1 } },
+        ]);
     },
 };
 export default mongoose.model('messages', MessageSchema);

@@ -1,10 +1,10 @@
-import React from "react";
-import clsx from "clsx";
-import style from "./style.module.scss";
-import { useState } from "react";
-import axios from "../../api/axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React from 'react';
+import clsx from 'clsx';
+import style from './style.module.scss';
+import { useState } from 'react';
+import axios from '../../api/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function VerifyCode({ userRecovery, setUserRecovery }) {
   const [dataRecovery, setDataRecovery] = useState(userRecovery);
@@ -12,11 +12,11 @@ function VerifyCode({ userRecovery, setUserRecovery }) {
   const verifyRecoveryPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/verifyRecoveryPassword", { dataRecovery });
+      const res = await axios.post('/verifyRecoveryPassword', { dataRecovery });
       // console.log(res.data);
       res.status === 200 && setCheckCodeNumber(res.data);
     } catch (error) {
-      error.response && error.response.status === 403 && toast.error("Mã xác nhận không hợp lệ", { position: "bottom-right", theme: "dark" });
+      error.response && error.response.status === 403 && toast.error('Mã xác nhận không hợp lệ', { position: 'bottom-right', theme: 'dark' });
     }
   };
   const changeValue = async (e) => {
@@ -28,16 +28,16 @@ function VerifyCode({ userRecovery, setUserRecovery }) {
     e.preventDefault();
     try {
       if (dataRecovery.password !== dataRecovery.passwordConfirm) {
-        toast.error("Mật khẩu không khớp", { position: "bottom-right", theme: "dark" });
+        toast.error('Mật khẩu không khớp', { position: 'bottom-right', theme: 'dark' });
       } else {
         const { numberCode, passwordConfirm, ...datasend } = dataRecovery;
-        const res = await axios.put("/recoveryPassword", { datasend });
+        const res = await axios.put('/recoveryPassword', { datasend });
         if (res.status === 200) {
-          toast.success("Đã cập nhật mật khẩu", { position: "bottom-right", theme: "dark" });
+          toast.success('Đã cập nhật mật khẩu', { position: 'bottom-right', theme: 'dark' });
         }
       }
     } catch (error) {
-      console.log(error);
+      toast.error('Cập nhật không thành công', { position: 'bottom-right', theme: 'dark' });
     }
   };
   const handleClose = () => {
@@ -53,7 +53,7 @@ function VerifyCode({ userRecovery, setUserRecovery }) {
       tabIndex={-1}
       aria-labelledby="UserConfirmLabel"
       aria-hidden="true"
-      style={{ display: "block" }}
+      style={{ display: 'block' }}
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
@@ -87,7 +87,7 @@ function VerifyCode({ userRecovery, setUserRecovery }) {
                       <div id="otp" className="inputs d-flex flex-row justify-content-center mt-2">
                         <input
                           className="m-2 text-center form-control rounded py-3"
-                          style={{ fontSize: 20, width: "40%" }}
+                          style={{ fontSize: 20, width: '40%' }}
                           name="numberCode"
                           maxLength={6}
                           minLength={6}
@@ -102,7 +102,7 @@ function VerifyCode({ userRecovery, setUserRecovery }) {
                           className="m-2 text-center form-control "
                           type="password"
                           style={{ fontSize: 20 }}
-                          value={dataRecovery.password || ""}
+                          value={dataRecovery.password || ''}
                           name="password"
                           onChange={changeValue}
                           placeholder="Mật khẩu"
@@ -121,18 +121,18 @@ function VerifyCode({ userRecovery, setUserRecovery }) {
                     )}
 
                     <div className="mt-4">
-                      <button type="submit" className={clsx(style.submitBtn, "btn", "btn-block", "btn-primary", "btn-lg", "validate")}>
-                        {checkCodeNumber ? "Cập Nhật" : "Xác thực"}
-                      </button>{" "}
+                      <button type="submit" className={clsx(style.submitBtn, 'btn', 'btn-block', 'btn-primary', 'btn-lg', 'validate')}>
+                        {checkCodeNumber ? 'Cập Nhật' : 'Xác thực'}
+                      </button>{' '}
                     </div>
                   </form>
                 </div>
                 {!checkCodeNumber && (
                   <div>
-                    {" "}
+                    {' '}
                     <span>
                       <a href="">Bạn chưa nhận được mã ?</a>
-                    </span>{" "}
+                    </span>{' '}
                   </div>
                 )}
               </div>

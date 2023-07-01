@@ -190,13 +190,15 @@ function AddFriend({ user }) {
           {/* {userData && <UserDtail userData={userData} />} */}
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-              Đóng
-            </button>
             {!userData ? (
-              <button type="submit" disabled={searchLoading} className="btn btn-primary" form="searchFriend">
-                {searchLoading ? <div class="spinner-border text-info" style={{ height: 20, width: 20 }} role="status"></div> : 'Tìm Kiếm'}
-              </button>
+              <div>
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" style={{ marginRight: 10 }}>
+                  Đóng
+                </button>
+                <button type="submit" disabled={searchLoading} className="btn btn-primary" form="searchFriend">
+                  {searchLoading ? <div className="spinner-border text-info" style={{ height: 20, width: 20 }} role="status"></div> : 'Tìm Kiếm'}
+                </button>
+              </div>
             ) : (
               <button
                 type="button"

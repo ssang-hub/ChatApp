@@ -8,16 +8,20 @@ import groupModel from '../models/groupModel';
 
 // get information myself
 const getInformation = async (req, res) => {
-    const user = req.user;
-    const result = await userModel.findOne({ userName: user.userName });
-    res.json(result);
+    try {
+        const result = await userModel.getUserInfomation(req.user._id);
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(404).json('not_found');
+    }
 };
 const getAllFriend = async (req, res) => {
     try {
         const result = await userModel.getAllFriend(req.user._id);
-        res.status(200).json(result);
+        // console.log(result);
+        return res.status(200).json(result);
     } catch (error) {
-        console.log(error);
+        return res.status(404).json('not_found');
     }
 };
 
@@ -156,6 +160,7 @@ const getContacts = async (req, res) => {
                 contactObject.contact = usersData.find((user) => user._id.toString() === contact.from.toString());
             } else {
                 contactObject.contact = groups.find((group) => group._id.toString() === contact.to.toString());
+                // contactObject.userGroup =
             }
             return contactObject;
         });

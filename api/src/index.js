@@ -21,17 +21,7 @@ import connectDB from './config/Database';
 import passport from './controllers/passport';
 
 // dotenv.config();
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-// });
-// io.on("connection", (socket) => {
-//   socket.on("chat message", (msg) => {
-//     console.log("message: " + msg);
-//   });
-// });
+
 connectDB();
 app.use(cors());
 app.use(express.json());

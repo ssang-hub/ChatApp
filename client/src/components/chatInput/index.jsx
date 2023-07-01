@@ -12,6 +12,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
 
   const [messageInput, setMessageInput] = useState('');
   const [imgaeSend, setImgaeSend] = useState(null);
+  const [typing, setTyping] = useState(false);
 
   const socket = useSocket();
 
@@ -25,6 +26,19 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
       };
     }
   }, [imgaeSend]);
+
+  useEffect(() => {
+    if (messageInput) {
+      socket.current.emit('on-typing', { from: user._id, to: chatCurrent._id });
+    }
+  }, [typing]);
+  useEffect(() => {
+    if (!messageInput) {
+      socket.current.emit('off-typing', { from: user._id, to: chatCurrent._id });
+      setTyping(false);
+    }
+  }, [messageInput]);
+
   useEffect(() => {
     setMessageInput('');
   }, [chatCurrent]);
@@ -36,7 +50,12 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
   };
 
   const sendSticker = (stickerItem) => {
-    socket.current.emit('send-sticker', { from: user._id, to: chatCurrent._id, content: stickerItem.url });
+    socket.current.emit('send-sticker', {
+      from: user._id,
+      to: chatCurrent._id,
+      userGroup: chatCurrent.admin ? { avatar: user.avatar, userName: user.userName } : undefined,
+      content: stickerItem.url,
+    });
     updateContactRecents(chatCurrent._id, 'Đã gửi một Sticker', true);
     setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'sticker', content: stickerItem.url } }]);
   };
@@ -48,11 +67,13 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
       let message = {
         from: user._id,
         message: { type: 'text', content: messageInput },
+        userGroup: chatCurrent.admin ? { avatar: user.avatar, userName: user.userName } : undefined,
         to: chatCurrent._id,
       };
       socket.current.emit('send-msg', message);
       setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'text', content: messageInput } }]);
       updateContactRecents(chatCurrent._id, messageInput, true);
+      setTyping(false);
       setMessageInput('');
     }
     setShowEmojiPicker(false);
@@ -71,6 +92,9 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
               className={clsx('form-control', 'h-100', 'border-0', style.inputStyle, 'pb-0', 'font-size-18')}
               value={messageInput}
               onChange={(e) => {
+                if (messageInput) {
+                  setTyping(true);
+                }
                 setMessageInput(e.target.value);
               }}
             />

@@ -18,7 +18,7 @@ const userSchema = new Schema({
     address: { type: String, default: null },
     avatar: {
         type: String,
-        default: `${process.env.DOMAIN}/images/randomAvatar/${Math.round(Math.random() * 30)}.svg`,
+        default: `${process.env.DOMAIN}/images/randomAvatar/${Math.round(Math.random() * 39)}.svg`,
     },
     coverAvatar: { type: String, default: `${process.env.DOMAIN}/images/imageCover.png` },
     socialAuth: { type: String, default: '' },
@@ -139,7 +139,7 @@ userSchema.statics = {
     getUserInfomation(userID) {
         return this.findOne(
             { _id: userID },
-            { local: 0, google: 0, facebook: 0, createdAt: 0, updatedAt: 0, deletedAt: 0, friends: 0 },
+            { local: 0, google: 0, facebook: 0, createdAt: 0, updatedAt: 0, deletedAt: 0, friends: 0, groups: 0 },
         );
     },
 

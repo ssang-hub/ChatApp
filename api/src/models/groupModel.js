@@ -28,7 +28,10 @@ groupSchema.statics = {
         }
     },
     getAllGroup(userId) {
-        return this.find({ groupUsers: userId });
+        return this.find({ groupUsers: { _id: userId } });
+    },
+    getAllIdGroup(userId) {
+        return this.find({ groupUsers: { _id: userId } }, { _id: 1 });
     },
     findGroupInArray(groupIds) {
         return this.find({ _id: { $in: groupIds } });

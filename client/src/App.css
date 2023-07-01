@@ -111,3 +111,22 @@ label {
 .text-decoration-underline {
   text-decoration: underline;
 }
+
+.input-search-message {
+  position: relative;
+  overflow: hidden;
+}
+
+.input-search-message input {
+  width: 0;
+  height: 30px;
+  opacity: 0;
+  transition: width 0.5s, opacity 0.5s;
+  padding: 0px;
+}
+
+.input-search-message.active-input-search-message input {
+  width: 200px;
+  opacity: 1;
+  padding: 12px;
+}

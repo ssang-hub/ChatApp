@@ -4,10 +4,8 @@ import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
-import { authSelector, RequestSelector, contactsSelector } from '../../store/selectors';
+import { authSelector, contactsSelector } from '../../store/selectors';
 import { login } from '../../store/reducers/auth.slice';
-import { receiverRequest } from '../../store/reducers/friendRequest.slice';
-import { updatePeerIDCall } from '../../store/reducers/peer.slice';
 import { updateNewRecentContacts } from '../../store/reducers/contacts.slice';
 
 import WellCome from '../../components/wellcome';
@@ -17,6 +15,9 @@ import Sidebar from '../../components/sidebar';
 import ChatInput from '../../components/chatInput';
 import VideoChatNotify from '../../components/videoCall/videoChatNotify';
 
+import { receiverRequest } from '../../store/reducers/friendRequest.slice';
+import { updatePeerIDCall } from '../../store/reducers/peer.slice';
+
 function Home() {
   const [chatCurrent, setChatCurrent] = useState(undefined);
   const [arrivalMessages, setArrivalMessages] = useState(null);
@@ -25,14 +26,12 @@ function Home() {
 
   const [OptionNav, setOptionNav] = useState('chat');
   const [chatVideoNotify, setChatVideoNotify] = useState(false);
-  const [messagesLoading, setMessagesLoading] = useState(false);
 
   // socket
   const socket = useRef(io(process.env.REACT_APP_SERVER));
 
   // global state
   const authSelect = useSelector(authSelector);
-  const RequestSelect = useSelector(RequestSelector);
   const contacts = useSelector(contactsSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,48 +43,31 @@ function Home() {
       const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_NAMEAPP));
       dispatch(login({ ...token, user: jwtDecode(token.accessToken) }));
       socket.current.emit('accountConnect', jwtDecode(token.accessToken)._id);
-      socket.current.on('msg-recieve', (msg) => {
-        setArrivalMessages({ fromSelf: false, message: msg.message, from: msg.from });
-        // updateContactRecents(msg.from, msg.message.content, false);
-      });
       socket.current.on('friend-Request-receive', (msg) => {
-        // console.log(msg);
         dispatch(receiverRequest);
       });
       socket.current.on('created-video-chat-room', (chatRoom) => {
         console.log(chatRoom);
       });
       socket.current.on('receive-video-call', (call) => {
-        console.log('callID', call.Callfrom._id);
         dispatch(updatePeerIDCall(call.Callfrom._id));
         setChatVideoNotify(call);
       });
-      socket.current.on('image-receive', (msg) => {
-        setArrivalMessages({ fromSelf: authSelect.user._id === msg.from, message: msg.message, from: msg.from });
-        // updateContactRecents(msg.from, 'Đã gửi một ảnh', false);
-      });
-      socket.current.on('sticker-receive', (msg) => {
-        setArrivalMessages({ fromSelf: authSelect.user._id === msg.from, message: msg.message, from: msg.from });
-        // updateContactRecents(msg.from, 'Đã gửi một sticker', false);
-      });
-      socket.current.on('send-image-success', (msg) => {
-        const msgSend = { fromSelf: true, message: msg.message };
-        setSendFileMessage(msgSend);
-      });
     }
   }, []);
+
   useEffect(() => {
     sendfileMessage && setMessagesChatCurrent((prevState) => [...prevState, sendfileMessage]);
   }, [sendfileMessage]);
   useEffect(() => {
-    if (arrivalMessages && chatCurrent && arrivalMessages.from === chatCurrent._id) setMessagesChatCurrent((prevState) => [...prevState, arrivalMessages]);
+    if (arrivalMessages && chatCurrent && (arrivalMessages.from === chatCurrent._id || arrivalMessages.users))
+      setMessagesChatCurrent((prevState) => [...prevState, arrivalMessages]);
   }, [arrivalMessages]);
 
   const updateContactRecents = (fromID, content, fromSelf) => {
     const prevState = contacts.filter((item) => item.contact._id !== fromID);
     const updateAt = contacts.find((item) => item.contact._id === fromID);
     const newContacts = [{ ...updateAt, content: content, fromSelf: fromSelf }, ...prevState];
-    console.log(newContacts);
     dispatch(updateNewRecentContacts(newContacts));
   };
   // console.log(contacts);
@@ -96,20 +78,22 @@ function Home() {
           <Nav OptionNav={OptionNav} setOptionNav={setOptionNav} user={authSelect.user} />
           <hr />
 
-          <Sidebar setChatCurrent={setChatCurrent} setMessagesLoading={setMessagesLoading} OptionNav={OptionNav} user={authSelect.user} setMessages={setMessagesChatCurrent} />
+          <Sidebar
+            setChatCurrent={setChatCurrent}
+            OptionNav={OptionNav}
+            user={authSelect.user}
+            setMessages={setMessagesChatCurrent}
+            socket={socket}
+            setSendFileMessage={setSendFileMessage}
+            setArrivalMessages={setArrivalMessages}
+            updateContactRecents={updateContactRecents}
+          />
 
           {chatCurrent ? (
             <div style={{ width: '100%' }}>
               {' '}
               <div style={{ height: '89%' }}>
-                <ChatContainer
-                  socketCurrent={socket.current}
-                  chatCurrent={chatCurrent}
-                  messages={messagesChatCurrent}
-                  setMessages={setMessagesChatCurrent}
-                  user={authSelect.user}
-                  messagesLoading={messagesLoading}
-                />
+                <ChatContainer socket={socket} chatCurrent={chatCurrent} messages={messagesChatCurrent} setMessages={setMessagesChatCurrent} user={authSelect.user} />
               </div>
               <div style={{ height: '11%' }}>
                 <ChatInput
