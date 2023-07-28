@@ -11,7 +11,7 @@ This project is a web app for chat app that includes the features: Login/Resgist
 - Clone the repository
 
 ```
-git clone  https://github.com/ssang-hub/ChatApp.git <project_name>
+git clone  https://github.com/ssang-hub/ChatApp.git 
 ```
 
 - Install dependencies on server
@@ -19,7 +19,7 @@ git clone  https://github.com/ssang-hub/ChatApp.git <project_name>
 ```
 cd <project_name>
 cd api
-npm install
+yarn install
 ```
 
 - Install dependencies on client
@@ -38,7 +38,7 @@ yarn install
 
 ```
 cd server
-npm run dev
+yarn dev
 ```
 
 - Run client

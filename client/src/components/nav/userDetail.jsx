@@ -8,7 +8,7 @@ import { updateUser } from '../../store/reducers/auth.slice';
 import { useDispatch } from 'react-redux';
 
 function UserDetail({ userDetail, setUserDetail }) {
-  const [changeOption, setChangeOption] = useState(false);
+  const [changeState, setChangeState] = useState(false);
   const [changeMyProfile, setChangeMyProfile] = useState();
   const axiosPrivate = useAxiosPrivate();
 
@@ -26,7 +26,7 @@ function UserDetail({ userDetail, setUserDetail }) {
       setChangeMyProfile(result.data);
       dispatch(updateUser(result.data));
       // console.log(result.data);
-      setChangeOption(false);
+      setChangeState(false);
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +47,7 @@ function UserDetail({ userDetail, setUserDetail }) {
             <div className="modal-header">
               <h1 className="modal-title fs-5">
                 <div className="d-flex">
-                  <div className="btn ">
+                  <div className="btn" onClick={() => setChangeState(false)}>
                     <IoChevronBackOutline />
                   </div>
                   <h5 className="pt-2">Thông tin tài khoản</h5>
@@ -61,7 +61,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                   <div className="position-relative">
                     <div>
                       <img className="w-100" src={userDetail.coverAvatar} alt="" />
-                      {changeOption && (
+                      {changeState && (
                         <div>
                           <label htmlFor="upload-cover-avatar" className="d-block">
                             <div className={style.cameraIcon} style={{ left: 5 }}>
@@ -73,7 +73,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                       )}
                     </div>
                     <div className="position-absolute w-100" style={{ bottom: -15 }}>
-                      {changeOption ? (
+                      {changeState ? (
                         <div>
                           <label htmlFor="upload-avatar">
                             <img className={clsx(style.avatarDetail, 'position-relative')} src={userDetail.avatar} alt="" />
@@ -99,7 +99,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                           <tr className="d-flex">
                             <td>Ngày Sinh:</td>
                             <td>
-                              {changeOption ? (
+                              {changeState ? (
                                 <div>
                                   <input type="date" name="DOB" onChange={(e) => changeInfomation(e)} className="form-control" id="" defaultValue={userDetail.DOB} />
                                 </div>
@@ -111,7 +111,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                           <tr className="d-flex">
                             <td>Địa chỉ:</td>
                             <td>
-                              {changeOption ? (
+                              {changeState ? (
                                 <div>
                                   <input
                                     type="text"
@@ -130,7 +130,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                           <tr className="d-flex">
                             <td>Giới tính:</td>
                             <td>
-                              {changeOption ? (
+                              {changeState ? (
                                 <div>
                                   <select name="gender" onChange={(e) => changeInfomation(e)} defaultValue={userDetail.gender} className="form-control form-select" id="">
                                     <option value="Nam">Nam</option>
@@ -146,7 +146,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                           <tr className="d-flex">
                             <td>Email:</td>
                             <td>
-                              {changeOption ? (
+                              {changeState ? (
                                 <div>
                                   <input
                                     type="email"
@@ -171,12 +171,12 @@ function UserDetail({ userDetail, setUserDetail }) {
             </div>
 
             <div className="modal-footer">
-              {changeOption ? (
+              {changeState ? (
                 <button className="btn btn-outline-success" onClick={() => handleChangeProfile()}>
                   Lưu lại
                 </button>
               ) : (
-                <button className="btn btn-outline-primary" onClick={() => setChangeOption(true)}>
+                <button className="btn btn-outline-primary" onClick={() => setChangeState(true)}>
                   Chỉnh sửa
                 </button>
               )}

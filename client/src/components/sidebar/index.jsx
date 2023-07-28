@@ -39,17 +39,18 @@ function Sidebar({ setChatCurrent, OptionNav, user, setMessages, socket, setArri
   useEffect(() => {
     if (socketContactState) {
       socket.current.on('msg-recieve', (msg) => {
-        setArrivalMessages({ fromSelf: false, message: msg.message, from: msg.from, users: msg.userGroup });
-        updateContactRecents(msg.userGroup ? msg.to : msg.from, msg.message.content, false);
+        setTheLastMessage(msg);
+        console.log(msg);
+        updateContactRecents(msg.userGroup ? msg.to : msg.from, msg.message.content, false, msg.userGroup);
       });
 
       socket.current.on('image-receive', (msg) => {
-        setArrivalMessages({ fromSelf: user._id === msg.from, message: msg.message, from: msg.from });
-        updateContactRecents(msg.from, 'Đã gửi một ảnh', false);
+        setTheLastMessage(msg);
+        updateContactRecents(msg.from, 'Đã gửi một ảnh', false, msg.userGroup);
       });
       socket.current.on('sticker-receive', (msg) => {
-        setArrivalMessages({ fromSelf: user._id === msg.from, message: msg.message, from: msg.from, users: msg.userGroup });
-        updateContactRecents(msg.from, 'Đã gửi một sticker', false);
+        setTheLastMessage(msg);
+        updateContactRecents(msg.from, 'Đã gửi một sticker', false, msg.userGroup);
       });
       socket.current.on('send-image-success', (msg) => {
         const msgSend = { fromSelf: true, message: msg.message };
@@ -57,6 +58,10 @@ function Sidebar({ setChatCurrent, OptionNav, user, setMessages, socket, setArri
       });
     }
   }, [socketContactState]);
+
+  const setTheLastMessage = (msg) => {
+    setArrivalMessages({ fromSelf: false, message: msg.message, from: msg.from, users: msg.userGroup, createdAt: msg.createdAt });
+  };
 
   return (
     <div className="border-end border-secondary scrollbar-primary" style={{ maxWidth: '18%', overflow: 'auto', height: '100%' }}>

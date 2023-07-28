@@ -48,6 +48,10 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
     message += EmojiClickData.emoji;
     setMessageInput(message);
   };
+  const getDateNowString = () => {
+    const dateNow = new Date();
+    return `${dateNow.getHours()}:${dateNow.getMinutes()} | ${dateNow.getDate()}-${dateNow.getMonth() + 1}-${dateNow.getFullYear()}`;
+  };
 
   const sendSticker = (stickerItem) => {
     socket.current.emit('send-sticker', {
@@ -57,7 +61,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
       content: stickerItem.url,
     });
     updateContactRecents(chatCurrent._id, 'Đã gửi một Sticker', true);
-    setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'sticker', content: stickerItem.url } }]);
+    setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'sticker', content: stickerItem.url }, createdAt: getDateNowString() }]);
   };
 
   const sendTextChat = (event) => {
@@ -71,7 +75,14 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
         to: chatCurrent._id,
       };
       socket.current.emit('send-msg', message);
-      setMessagesChatCurrent((prevState) => [...prevState, { fromSelf: true, message: { type: 'text', content: messageInput } }]);
+      setMessagesChatCurrent((prevState) => [
+        ...prevState,
+        {
+          fromSelf: true,
+          message: { type: 'text', content: messageInput },
+          createdAt: getDateNowString(),
+        },
+      ]);
       updateContactRecents(chatCurrent._id, messageInput, true);
       setTyping(false);
       setMessageInput('');

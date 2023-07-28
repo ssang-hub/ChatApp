@@ -64,10 +64,11 @@ function Home() {
       setMessagesChatCurrent((prevState) => [...prevState, arrivalMessages]);
   }, [arrivalMessages]);
 
-  const updateContactRecents = (fromID, content, fromSelf) => {
+  const updateContactRecents = (fromID, content, fromSelf, users) => {
     const prevState = contacts.filter((item) => item.contact._id !== fromID);
     const updateAt = contacts.find((item) => item.contact._id === fromID);
-    const newContacts = [{ ...updateAt, content: content, fromSelf: fromSelf }, ...prevState];
+    const newContacts = [{ ...updateAt, content: content, fromSelf: fromSelf, users }, ...prevState];
+    // console.log(newContacts);
     dispatch(updateNewRecentContacts(newContacts));
   };
   // console.log(contacts);

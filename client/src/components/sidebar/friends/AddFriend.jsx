@@ -58,7 +58,7 @@ function AddFriend({ user }) {
       setResultSearch((prevState) => {
         return prevState.map((item) => {
           if (item._id.toString() === userId.toString()) {
-            return { ...item, peddingAccept: false };
+            return { ...item, pendingAccept: false };
           }
           return item;
         });
