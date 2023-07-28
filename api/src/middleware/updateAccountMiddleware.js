@@ -9,18 +9,18 @@ const checkEmailUpdate = async (req, res, next) => {
             next();
         } else {
             const numberCode = Math.round(Math.random() * 1000000);
-            await friendRequestModel.createUserPedding(req.user._id.toString(), numberCode);
+            await friendRequestModel.createUserPending(req.user._id.toString(), numberCode);
             await mailVerify(email, numberCode, 'verifyMyEmail');
-            return res.status(206).json('code pedding');
+            return res.status(206).json('code Pending');
         }
     } catch (error) {
-        return res.status(400).json('updated failed');
+        return res.status(403).json('updated failed');
     }
 };
 const verifyMyEmail = async (req, res, next) => {
     try {
         const data = req.body;
-        const checkUser = await friendRequestModel.findUserPedding(data.id, data.numberCode);
+        const checkUser = await friendRequestModel.findUserPending(data.id, data.numberCode);
         checkUser ? res.status(200).json(true) : res.status(403).json(false);
     } catch (error) {
         res.status(403).json(false);

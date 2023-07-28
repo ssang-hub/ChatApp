@@ -6,7 +6,7 @@ const pendingUsers = new Schema({
     numberCode: { type: Number, required: true },
 });
 pendingUsers.statics = {
-    RegisterPedding(data) {
+    RegisterPending(data) {
         return this.create(data);
     },
 
@@ -21,19 +21,19 @@ pendingUsers.statics = {
         }
         // await userModel.createAccount(data)
     },
-    createUserPedding(idAccount, numberCode) {
+    createUserPending(idAccount, numberCode) {
         return this.create({ idAccount, numberCode });
     },
-    async findUserPedding(idUserPendding, numberCode) {
+    async findUserPending(idUserPendding, numberCode) {
         const checkUser = await this.findOne({ _id: idUserPendding, numberCode });
         if (checkUser) {
             return true;
         }
         return false;
     },
-    async findUserAndDelete(IdUserPedding) {
+    async findUserAndDelete(IdUserPending) {
         try {
-            const data = await this.findOne({ _id: IdUserPedding });
+            const data = await this.findOne({ _id: IdUserPending });
             await this.deleteMany({ idAccount: data.idAccount });
             return data;
         } catch (error) {

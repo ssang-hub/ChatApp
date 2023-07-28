@@ -120,7 +120,7 @@ const register = async (req, res, next) => {
         //   res.json(false);
         // } else {
         //   const codeNumber = Math.round(Math.random() * 1000000);
-        //   const result = await pendingUserModel.RegisterPedding({ ...accountCreate, code: codeNumber });
+        //   const result = await pendingUserModel.RegisterPending({ ...accountCreate, code: codeNumber });
         //   await mailVerify(infromation.email, codeNumber);
         //   res.status(200).json(result._id);
         // }
@@ -161,7 +161,7 @@ const forgotPassword = async (req, res) => {
         const checkEmail = await userModel.findUserByEmail(req.body.recoveryEmail);
         if (checkEmail) {
             await mailVerify(req.body.recoveryEmail, numberCode, 'forgotPassword');
-            const user = await pendingUserModel.createUserPedding(checkEmail._id.toString(), numberCode);
+            const user = await pendingUserModel.createUserPending(checkEmail._id.toString(), numberCode);
             return res.status(200).json(user._id);
         } else {
             return res.status(403).json(false);
@@ -174,7 +174,7 @@ const forgotPassword = async (req, res) => {
 const verifyRecoveryPassword = async (req, res) => {
     try {
         const data = req.body.dataRecovery;
-        const checkUser = await pendingUserModel.findUserPedding(data.id, data.numberCode);
+        const checkUser = await pendingUserModel.findUserPending(data.id, data.numberCode);
         return checkUser ? res.status(200).json(true) : res.status(403).json(false);
     } catch (error) {
         return res.status(403).json(false);

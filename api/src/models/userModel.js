@@ -137,10 +137,7 @@ userSchema.statics = {
         }
     },
     getUserInfomation(userID) {
-        return this.findOne(
-            { _id: userID },
-            { local: 0, google: 0, facebook: 0, createdAt: 0, updatedAt: 0, deletedAt: 0, friends: 0, groups: 0 },
-        );
+        return this.findOne({ _id: userID }, { local: 0, socialAuth: 0, friends: 0, groups: 0 });
     },
 
     async findUsers(userIds, myUserId) {

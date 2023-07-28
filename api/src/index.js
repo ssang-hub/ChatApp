@@ -1,26 +1,26 @@
 import express from 'express';
 const app = express();
-// import dotenv from "dotenv";
+import dotenv from 'dotenv';
 import http from 'http';
 import path from 'path';
 import socketService from './socket';
 const { Server } = require('socket.io');
 const server = http.createServer(app);
 import cors from 'cors';
+
+import route from './routes';
+import connectDB from './config/Database';
+import passport from './controllers/passport';
+
+dotenv.config();
+
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: `${process.env.CLIENT_APP}`,
         // origin: true,
         credentials: true,
     },
 });
-import route from './routes';
-import connectDB from './config/Database';
-// import typeDefs from "./config/typedefs/typedef";
-// import resolvers from "./config/resolvers/resolvers";
-import passport from './controllers/passport';
-
-// dotenv.config();
 
 connectDB();
 app.use(cors());

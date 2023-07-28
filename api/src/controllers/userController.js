@@ -6,11 +6,18 @@ import groupModel from '../models/groupModel';
 
 // Create new Group Chat
 
+const formatDateString = (date) => {
+    const DOB = new Date(date);
+    return `${DOB.getDate()}-${DOB.getMonth() + 1}-${DOB.getFullYear()}`;
+};
+
 // get information myself
 const getInformation = async (req, res) => {
     try {
         const result = await userModel.getUserInfomation(req.user._id);
-        return res.status(200).json(result);
+        const userData = { ...result.toJSON(), DOB: formatDateString(result.DOB) };
+        // console.log(userData);
+        return res.status(200).json(userData);
     } catch (error) {
         return res.status(404).json('not_found');
     }
@@ -52,7 +59,7 @@ const searchUser = async (req, res) => {
                 }
             }
 
-            // console.log(responseData);
+            console.log(responseData);
             res.status(200).json(responseData);
         }
     } catch (error) {
@@ -69,9 +76,11 @@ const updateMyProfile = async (req, res) => {
             projection: '_id userName DOB gender phone address avatar coverAvatar',
         });
 
-        res.status(200).json(result.toJSON());
+        const newUSerData = { ...result.toJSON(), DOB: formatDateString(result.DOB) };
+
+        return res.status(200).json(newUSerData);
     } catch (error) {
-        console.log(error);
+        return res.status(400).json('bad_request');
     }
 };
 const getUserInfomation = async (req, res) => {
@@ -157,8 +166,10 @@ const getContacts = async (req, res) => {
             ) {
                 contactObject.contact = usersData.find((user) => user._id.toString() === contact.to.toString());
             } else if (usersData.some((user) => user._id.toString() === contact.from.toString())) {
+                contactObject.fromSelf = false;
                 contactObject.contact = usersData.find((user) => user._id.toString() === contact.from.toString());
             } else {
+                contactObject.users = contact.lastUserSend;
                 contactObject.contact = groups.find((group) => group._id.toString() === contact.to.toString());
                 // contactObject.userGroup =
             }

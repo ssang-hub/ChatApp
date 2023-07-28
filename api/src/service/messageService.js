@@ -7,17 +7,17 @@ const addMessage = async (msg) => {
         const { __v, deleteAt, ...result } = await messageModel.createMessage(msg);
         // console.log(result);
         const date = new Date(result.createdAt);
+
         const message = {
             _id: result._id,
             from: result.senderId,
             to: result.receiverId,
             message: result.message,
+            lastUserSend: msg.userGroup,
             createdAt: `${date.getHours()}:${date.getMinutes()} | ${date.getDate()}-${
                 date.getMonth() + 1
             }-${date.getFullYear()}`,
         };
-        // console.log(message.message);
-        // await ContactsModel.updateRecent(message);
         await ContactsModel.updateRecent(message);
         return message;
 
@@ -26,4 +26,5 @@ const addMessage = async (msg) => {
         console.log(error);
     }
 };
-export { addMessage };
+const updateContactsGroup = async () => {};
+export { addMessage, updateContactsGroup };

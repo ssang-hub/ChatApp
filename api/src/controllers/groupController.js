@@ -14,7 +14,8 @@ const createGroup = async (req, res) => {
         const groupCreate = await groupModel.createGroup(newGroup);
         const { __v0, ...myGroup } = groupCreate.toJSON();
         // add contact
-        await ContactModel.createContactGroup(newGroup.groupUsers, myGroup._id);
+        const lastUserSend = { avatar: req.user.avatar, userName: req.user.userName };
+        await ContactModel.createContactGroup(newGroup.groupUsers, myGroup._id, lastUserSend);
         return res.status(200).json(myGroup);
     } catch (error) {
         return res.status(400).json('crete group failed');
