@@ -11,6 +11,7 @@ import refreshTokenModel from '../models/refreshTokenModel';
 import * as authJWT from '../middleware/JsonWebToken';
 
 dotevn.config();
+
 const mailVerify = async (email, codeNumber, option) => {
     try {
         let transporter = nodemailer.createTransport({

@@ -3,4 +3,5 @@
 .env
 /src/routes/test.js
 /test.http
-/yarn.lock
+/src/public/images/avatars
+/src/public/images/message

@@ -47,13 +47,15 @@ function FriendRequest() {
       {Requests.length > 0 &&
         Requests.map((Request) => (
           <div key={Request._id}>
-            <div className="d-flex text-light p-3" style={{ width: 350 }}>
+            <div className="d-flex text-light p-3" style={{ width: 300 }}>
               <div>
                 <img className={clsx(style.avatarNotify)} src={Request.users.avatar} alt="" />
               </div>
               <div className="mx-2">
                 <h5 className="font-weight-bold d-inline">{Request.users.userName} </h5>
-                <div className="text-left d-inline">Đã gửi lời kết bạn cho bạn. Hãy đồng ý để trở thành bạn bè</div>
+                <div style={{ fontSize: 15 }} className="text-left d-inline">
+                  Đã gửi lời kết bạn cho bạn. Hãy đồng ý để trở thành bạn bè
+                </div>
               </div>
               <div>
                 <button className="btn btn-success mb-1" onClick={() => RequestAccept(Request._id)}>

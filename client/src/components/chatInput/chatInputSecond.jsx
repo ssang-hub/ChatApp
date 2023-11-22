@@ -35,7 +35,7 @@ const ChatInputSecond = ({ setImgaeSend, handleEmojiClick, sendSticker }) => {
         const ListSticker = await response.json();
         setStickerList(
           ListSticker.map((sticker) => {
-            return { id: sticker.id, stickerName: sticker.stickerName, avatar: sticker.stickerImage };
+            return { id: sticker.id, stickerName: sticker.stickerName };
           }),
         );
       } catch (error) {
@@ -127,7 +127,7 @@ const ChatInputSecond = ({ setImgaeSend, handleEmojiClick, sendSticker }) => {
             </div>
             {stickerPage.map((stickerItemList) => (
               <div className="pointerMouse" key={stickerItemList.id} onClick={() => setStickerName(stickerItemList.stickerName)}>
-                <img className={style.stickerImageList} src={stickerItemList.avatar} alt="" />
+                <img className={style.stickerImageList} src={`${process.env.REACT_APP_STICKER_IMAGE}${stickerItemList.id}.gif`} alt="" />
               </div>
             ))}
             <div className="p-1 mt-2">

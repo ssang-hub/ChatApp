@@ -2,11 +2,12 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import Header from './header';
 import style from './style.module.scss';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-
-function ChatContainer({ socket, chatCurrent, messages, user, setMessages }) {
+import Gallery from './gallery';
+function ChatContainer({ socket, chatCurrent, messages, user, setMessages, setImageLightBox }) {
   const myContainerRef = useRef(null);
   const [numberPage, setNumberPage] = useState(0);
   const [typing, setTyping] = useState(false);
+
   const axiosPrivate = useAxiosPrivate();
 
   const handleScroll = (event) => {
@@ -82,7 +83,12 @@ function ChatContainer({ socket, chatCurrent, messages, user, setMessages }) {
                 <div className="d-flex flex-row justify-content-end position-relative">
                   <div style={{ marginRight: 35 }}>
                     {message.message.type === 'sticker' && <img src={message.message.content} className={style.stickerSize} style={{ marginRight: 10 }} />}
-                    {message.message.type === 'image' && <img src={message.message.content} className={style.imageSize} style={{ marginLeft: 10 }} />}
+                    {message.message.type === 'image' && (
+                      <div style={{ marginRight: 15 }}>
+                        <Gallery image={message.message.content} />
+                      </div>
+                    )}
+
                     {message.message.type === 'text' && (
                       <p className="small p-3 me-3 mb-1 text-white rounded-3 bg-primary font-size-16" style={{ backgroundColor: '#f5f6f7' }}>
                         {message.message.content}
@@ -105,7 +111,11 @@ function ChatContainer({ socket, chatCurrent, messages, user, setMessages }) {
                   </div>
                   <div style={{ marginLeft: 35 }}>
                     {message.message.type === 'sticker' && <img src={message.message.content} className={style.stickerSize} style={{ marginLeft: 10 }} />}
-                    {message.message.type === 'image' && <img src={message.message.content} className={style.imageSize} style={{ marginLeft: 10 }} />}
+                    {message.message.type === 'image' && (
+                      <div style={{ marginLeft: 15 }}>
+                        <Gallery image={message.message.content} />
+                      </div>
+                    )}
                     {message.message.type === 'text' && (
                       <div>
                         <p className="small p-3 ms-3 mb-1 rounded-3 text-dark font-size-14" style={{ backgroundColor: '#f5f6f7' }}>

@@ -12,11 +12,10 @@ const formatDateString = (date) => {
 };
 
 // get information myself
-const getInformation = async (req, res) => {
+const getMyInfo = async (req, res) => {
     try {
-        const result = await userModel.getUserInfomation(req.user._id);
+        const result = await userModel.getMyInfo(req.user._id);
         const userData = { ...result.toJSON(), DOB: formatDateString(result.DOB) };
-        // console.log(userData);
         return res.status(200).json(userData);
     } catch (error) {
         return res.status(404).json('not_found');
@@ -68,16 +67,18 @@ const searchUser = async (req, res) => {
 };
 
 const updateMyProfile = async (req, res) => {
-    // console.log("ok");
     try {
-        const { changeMyProfile } = req.body;
-        const result = await userModel.findOneAndUpdate({ _id: req.user._id }, changeMyProfile, {
-            new: true,
-            projection: '_id userName DOB gender phone address avatar coverAvatar',
-        });
+        // console.log(req.body);
+        const result = await userModel.findOneAndUpdate(
+            { _id: req.user._id },
+            { ...req.body, 'local.email': req.body.email },
+            {
+                new: true,
+                projection: '_id userName DOB gender phone address avatar coverAvatar',
+            },
+        );
 
-        const newUSerData = { ...result.toJSON(), DOB: formatDateString(result.DOB) };
-
+        const newUSerData = { ...result.toJSON(), DOB: formatDateString(result.DOB), email: req.body.email };
         return res.status(200).json(newUSerData);
     } catch (error) {
         return res.status(400).json('bad_request');
@@ -185,7 +186,7 @@ export {
     refuseRequest,
     getAllFriend,
     getNumberRequest,
-    getInformation,
+    getMyInfo,
     getAllUser,
     searchUser,
     updateMyProfile,

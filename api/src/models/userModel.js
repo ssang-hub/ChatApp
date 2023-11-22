@@ -131,13 +131,14 @@ userSchema.statics = {
             const { local, socialAuth, friends, ...SocialUser } = user.toJSON();
             return SocialUser;
         } catch (error) {
-            console.log();
             console.log(error);
-            // console.log('error');
         }
     },
-    getUserInfomation(userID) {
-        return this.findOne({ _id: userID }, { local: 0, socialAuth: 0, friends: 0, groups: 0 });
+    getMyInfo(userID) {
+        return this.findOne(
+            { _id: userID },
+            { 'local.hash': 0, 'local.accountName': 0, socialAuth: 0, friends: 0, groups: 0 },
+        );
     },
 
     async findUsers(userIds, myUserId) {

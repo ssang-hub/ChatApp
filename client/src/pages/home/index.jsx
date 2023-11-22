@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
-
 import { authSelector, contactsSelector } from '../../store/selectors';
 import { login } from '../../store/reducers/auth.slice';
 import { updateNewRecentContacts } from '../../store/reducers/contacts.slice';
@@ -93,7 +92,7 @@ function Home() {
           {chatCurrent ? (
             <div style={{ width: '100%' }}>
               {' '}
-              <div style={{ height: '89%' }}>
+              <div style={{ height: '85%' }}>
                 <ChatContainer socket={socket} chatCurrent={chatCurrent} messages={messagesChatCurrent} setMessages={setMessagesChatCurrent} user={authSelect.user} />
               </div>
               <div style={{ height: '11%' }}>

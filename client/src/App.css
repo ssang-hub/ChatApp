@@ -130,3 +130,7 @@ label {
   opacity: 1;
   padding: 12px;
 }
+
+.element-hover-pointer:hover {
+  cursor: pointer;
+}

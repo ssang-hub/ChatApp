@@ -5,7 +5,7 @@ import * as authController from '../controllers/authController';
 import * as groupController from '../controllers/groupController';
 
 import multer from 'multer';
-import { checkEmailUpdate } from '../middleware/updateAccountMiddleware';
+import { checkEmailUpdate, checkImageUpload } from '../middleware/AccountMiddleware';
 
 const upload = multer({ dest: 'src/public/images/avatars/' });
 const route = express.Router();
@@ -19,7 +19,7 @@ route.get('/getGroupMessages', messageController.getGroupMessages);
 
 // route.post("/removeMessage", messageController.removeMessage);
 
-route.get('/getInformation', userController.getInformation);
+route.get('/myInfo', userController.getMyInfo);
 route.get('/getAllUser', userController.getAllUser);
 
 //
@@ -37,7 +37,11 @@ route.post('/addUsersToGroup', groupController.addUsersToGroup);
 route.post('/leaveGroup', groupController.leaveGroup);
 
 route.post('/searchUser', userController.searchUser);
-route.put('/updateMyProfile', checkEmailUpdate, upload.single('file'), userController.updateMyProfile);
+route.put(
+    '/updateMyProfile',
+    // upload.single('file'), checkImageUpload,
+    userController.updateMyProfile,
+);
 
 route.post('/RequestAccept', userController.RequestAccept);
 route.get('/Request', userController.Request);

@@ -7,10 +7,9 @@ import axios from '../../api/axios';
 import clsx from 'clsx';
 
 import { FcGoogle } from 'react-icons/fc';
-import { AiOutlineTwitter, AiOutlineFacebook, AiOutlineUser, AiFillBackward } from 'react-icons/ai';
+import { AiOutlineUser, AiFillBackward } from 'react-icons/ai';
 
 import { GoogleLogin } from 'react-google-login';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { gapi } from 'gapi-script';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -101,12 +100,6 @@ function Auth() {
     }
   };
 
-  // const SocialLogin = async (e, option) => {
-  //   if (option === "google") {
-  //     const result = await axios.get(googleLogin);
-  //     console.log(result.data);
-  //   }
-  // };
   const changeValue = (event) => {
     setUser((prevState) => {
       return { ...prevState, [event.target.name]: event.target.value };
@@ -119,12 +112,7 @@ function Auth() {
     // window.location.reload();
     navigate('/');
   };
-  const facebookAuth = async (profileObj) => {
-    console.log(profileObj);
-    // const data = await axios.post('/facebookVerify', { tokenId: profileObj.tokenId });
-    // localStorage.setItem(process.env.REACT_APP_NAMEAPP, JSON.stringify(data.data));
-    // window.location.reload();
-  };
+
   const responseGoogle = (response) => {
     console.log(response);
   };
@@ -137,22 +125,6 @@ function Auth() {
               <p className="text-center mb-3 mt-2">APP CHAT NODEJS</p>
               {/* social authentication */}
               <div className="mx-auto d-flex">
-                <div className={clsx('mx-2', 'px-3', 'py-2', 'text-primary', style.socialBtn)}>
-                  <AiOutlineTwitter />
-                </div>
-                {/* 
-                <FacebookLogin
-                  appId={process.env.REACT_APP_FACEBOOK}
-                  autoLoad
-                  callback={facebookAuth}
-                  fields="name,email,picture"
-                  render={(renderProps) => (
-                    <div className={clsx('mx-2', 'px-3', 'py-2', 'text-primary', style.socialBtn)} onClick={renderProps.onClick}>
-                      <AiOutlineFacebook />
-                    </div>
-                  )}
-                /> */}
-                {/* google authentication */}
                 <GoogleLogin
                   clientId={process.env.REACT_APP_GOOGLE}
                   onSuccess={googleAuth}

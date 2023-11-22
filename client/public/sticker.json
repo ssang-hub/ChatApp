@@ -1,99 +1,74 @@
 [
   {
-    "id": "3abfed91-f441-4038-8993-3509baf17fb4",
-    "stickerName": "amy cat",
-    "stickerImage": "https://media.tenor.com/gGeJY_8oR-8AAAAj/tkthao219-ami.gif"
+    "id": "1",
+    "stickerName": "amy cat"
   },
   {
-    "id": "8a12e823-f143-449e-85b0-01cb41754c95",
-    "stickerName": "pokemon",
-    "stickerImage": "https://media.tenor.com/xsK906RWDNIAAAAi/pokemon-vulpix.gif"
+    "id": "2",
+    "stickerName": "pokemon"
   },
 
   {
-    "id": "17182df3-4413-49ee-8693-0fde07a096cc",
-    "stickerName": "doraemon",
-    "stickerImage": "https://media.tenor.com/BpKxlZSGHrcAAAAi/doraemon.gif"
+    "id": "3",
+    "stickerName": "doraemon"
   },
 
   {
-    "id": "9860fcce-a81a-4af9-8ef4-440ccceee132",
-    "stickerName": "peach",
-    "stickerImage": "https://media.tenor.com/NaUN3Yn2EiYAAAAj/peach-cat.gif"
+    "id": "4",
+    "stickerName": "peach"
   },
   {
-    "id": "94e14e35-a01d-48cb-929a-4f47ff056b81",
-    "stickerName": "capoo",
-    "stickerImage": "https://media.tenor.com/8_gXVW3cijgAAAAj/capoo-bugcat.gif"
+    "id": "5",
+    "stickerName": "capoo"
   },
   {
-    "id": "824e3e43-0c76-440e-8071-0c9fe471ad68",
-    "stickerName": "Quby",
-    "stickerImage": "https://media.tenor.com/-MlEF7aRcA0AAAAi/tkthao219-quby.gif"
+    "id": "6",
+    "stickerName": "Quby"
   },
   {
-    "id": "a1bf9bd0-7d15-4842-b5c6-b7d2a488e86b",
-    "stickerName": "Cxyduck",
-    "stickerImage": "https://media.tenor.com/9RTTLArPQPEAAAAi/cxyduck.gif"
+    "id": "7",
+    "stickerName": "Cxyduck"
   },
   {
-    "id": "b4d50d12-9ec1-497d-982f-37a9751ced33",
-    "stickerName": "qoobee",
-    "stickerImage": "https://media.tenor.com/olrhrM3h_SoAAAAi/qoobee-upset.gif"
+    "id": "8",
+    "stickerName": "qoobee"
   },
   {
-    "id": "85708b41-fa90-4f36-8d06-8d6f7b9251a5",
-    "stickerName": "dinosaur",
-    "stickerImage": "https://media.tenor.com/xubUJsYKtH8AAAAi/dinosaur-cute.gif"
+    "id": "9",
+    "stickerName": "dinosaur"
   },
   {
-    "id": "2a8a3db1-33fc-44d4-8647-d307e3018d84",
-    "stickerName": "bubududu",
-    "stickerImage": "https://media.tenor.com/Wn0bcPkIJlYAAAAi/bubu-yier-iklog.gif"
+    "id": "10",
+    "stickerName": "bubududu"
   },
   {
-    "id": "00c69236-d784-4c66-af68-3865ba0ce699",
-    "stickerName": "興奮する",
-    "stickerImage": "https://media.tenor.com/zVycXGylfm0AAAAi/%E8%85%B0%E3%82%92%E6%8C%AF%E3%82%8B-%E3%81%86%E3%81%95%E3%81%8E%E3%82%85%E3%83%BC%E3%82%93.gif"
+    "id": "11",
+    "stickerName": "興奮する"
   },
   {
-    "id": "a4b79536-3892-4918-bf89-ee50e62ad7ee",
-    "stickerName": "aggretsuko",
-    "stickerImage": "https://media.tenor.com/lMcYFQSiyNcAAAAi/aggretsuko-nice.gif"
+    "id": "12",
+    "stickerName": "aggretsuko"
   },
   {
-    "id": "5e2dd09b-dd14-473d-bd5d-0c8e0ab92941",
-    "stickerName": "mini panda",
-    "stickerImage": "https://media.tenor.com/F38DmRVUp6AAAAAj/panda-mini-panda.gif"
+    "id": "13",
+    "stickerName": "mini panda"
   },
   {
-    "id": "622de795-c938-4d1f-9770-963121f99416",
-    "stickerName": "spongebob nickelodeon",
-    "stickerImage": "https://media.tenor.com/0-8ILBs87LwAAAAi/spongebob-nickelodeon.gif"
+    "id": "14",
+    "stickerName": "spongebob nickelodeon"
   },
   {
-    "id": "a3b1ab51-d4fd-4e11-901c-9d5b41494e38",
-    "stickerName": "sheep cute",
-    "stickerImage": "https://media.tenor.com/IrJwvdrP1GQAAAAi/sheep-cute.gif"
+    "id": "15",
+    "stickerName": "sheep cute"
   },
+
   {
-    "id": "32dd4b30-bd0a-4d5d-b5cc-3928ad65ac3b",
-    "stickerName": "moving man",
-    "stickerImage": "https://media.tenor.com/Q6MCVjcgSrIAAAAi/moving-man.gif"
+    "id": "16",
+    "stickerName": "akirambow"
   },
+
   {
-    "id": "805378cf-a925-408e-a9da-da46a74e8521",
-    "stickerName": "akirambow",
-    "stickerImage": "https://media.tenor.com/7d1hJxaSzfsAAAAi/akirambow-spoiled-rabbit.gif"
-  },
-  {
-    "id": "3f10b0a5-af0b-4926-8769-37f5f9b14d16",
-    "stickerName": "doraemon",
-    "stickerImage": "https://media.tenor.com/BpKxlZSGHrcAAAAi/doraemon.gif"
-  },
-  {
-    "id": "b03513fc-2b15-47de-a6fa-df672979af13",
-    "stickerName": "lợn",
-    "stickerImage": "https://media.tenor.com/5blysNVjj4wAAAAj/confused-question.gif"
+    "id": "17",
+    "stickerName": "lợn"
   }
 ]

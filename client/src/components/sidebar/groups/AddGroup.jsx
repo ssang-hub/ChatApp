@@ -8,6 +8,8 @@ import { friendRemainingSelector } from '../../../store/selectors';
 import { addGroup, changeFilter } from '../../../store/reducers/contacts.slice';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import useScoket from '../../../hooks/useSocket';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AddGroup({ user }) {
   const [selectAvatarGroup, setSelectAvatarGroup] = useState(false);
@@ -39,10 +41,14 @@ function AddGroup({ user }) {
   // create group
   const createGroup = async () => {
     try {
-      setLoading(true);
-      const { data } = await axiosPrivate.post('/createGroup', { name: groupName, avatar: avatarSelected, groupUsers: groupUsers });
-      socket.current.emit('group-created', { _id: data._id });
-      window.location.reload();
+      if (groupUsers.length >= 2) {
+        setLoading(true);
+        const { data } = await axiosPrivate.post('/createGroup', { name: groupName, avatar: avatarSelected, groupUsers: groupUsers });
+        socket.current.emit('group-created', { _id: data._id });
+        window.location.reload();
+      } else {
+        toast.error('Cần tối thiểu 3 người để tạo nhóm', { theme: 'dark', position: 'bottom-right' });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -132,6 +138,7 @@ function AddGroup({ user }) {
           </div>
           {selectAvatarGroup && <SettupavatarGroup setSelectAvatarGroup={setSelectAvatarGroup} avatarSelected={avatarSelected} setAvatarSelected={setAvatarSelected} />}
         </div>
+        <ToastContainer />
       </div>
     </div>
   );

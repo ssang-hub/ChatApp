@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { AiOutlineCamera } from 'react-icons/ai';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -12,16 +12,32 @@ function UserDetail({ userDetail, setUserDetail }) {
   const [changeMyProfile, setChangeMyProfile] = useState();
   const axiosPrivate = useAxiosPrivate();
 
+  // avatar user
+  const [avatar, setAvatar] = useState(userDetail.avatar);
+  const [coverAvatar, setCoverAvatar] = useState(userDetail.coverAvatar);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      avatar && URL.revokeObjectURL(avatar);
+    };
+  }, [avatar]);
+  useEffect(() => {
+    return () => {
+      coverAvatar && URL.revokeObjectURL(coverAvatar);
+    };
+  }, [coverAvatar]);
 
   const changeInfomation = (event) => {
     setChangeMyProfile((prevState) => {
       return { ...prevState, [event.target.name]: event.target.value };
     });
   };
+
   const handleChangeProfile = async () => {
     try {
-      const result = await axiosPrivate.put('/updateMyProfile', { changeMyProfile });
+      const result = await axiosPrivate.put('/updateMyProfile', changeMyProfile);
       setUserDetail(result.data);
       setChangeMyProfile(result.data);
       dispatch(updateUser(result.data));
@@ -60,7 +76,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                 <div className="mb-2">
                   <div className="position-relative">
                     <div>
-                      <img className="w-100" src={userDetail.coverAvatar} alt="" />
+                      <img className="w-100" src={coverAvatar} alt="" />
                       {changeState && (
                         <div>
                           <label htmlFor="upload-cover-avatar" className="d-block">
@@ -68,7 +84,13 @@ function UserDetail({ userDetail, setUserDetail }) {
                               <AiOutlineCamera />
                             </div>
                           </label>
-                          <input type="file" name="coverAvatar" id="upload-cover-avatar" className={style.uploadPhoto} />
+                          <input
+                            type="file"
+                            name="coverAvatar"
+                            id="upload-cover-avatar"
+                            className={style.uploadPhoto}
+                            onChange={(e) => setCoverAvatar(URL.createObjectURL(e.target.files[0]))}
+                          />
                         </div>
                       )}
                     </div>
@@ -76,15 +98,15 @@ function UserDetail({ userDetail, setUserDetail }) {
                       {changeState ? (
                         <div>
                           <label htmlFor="upload-avatar">
-                            <img className={clsx(style.avatarDetail, 'position-relative')} src={userDetail.avatar} alt="" />
+                            <img className={clsx(style.avatarDetail, 'position-relative')} src={avatar} alt="" />
                             <div className={style.cameraIcon}>
                               <AiOutlineCamera />
                             </div>
                           </label>
-                          <input type="file" name="avatar" id="upload-avatar" className={style.uploadPhoto} />
+                          <input type="file" name="avatar" id="upload-avatar" className={style.uploadPhoto} onChange={(e) => setAvatar(URL.createObjectURL(e.target.files[0]))} />
                         </div>
                       ) : (
-                        <img className={style.avatarDetail} src={userDetail.avatar} alt="" />
+                        <img className={style.avatarDetail} src={avatar} alt="" />
                       )}
                     </div>
                   </div>

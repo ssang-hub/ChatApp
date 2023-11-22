@@ -58,17 +58,13 @@ Contact.statics = {
             .limit(10);
     },
     createContactGroup(groupUsers, groupId, lastUserSend) {
-        const newContacts = groupUsers.map((item) => {
-            return {
-                from: item,
-                to: groupId,
-                content: 'Bạn đã được thêm vào nhóm',
-                updateAt: Date.now(),
-                lastUserSend: lastUserSend,
-            };
+        this.create({
+            from: groupUsers,
+            to: groupId,
+            content: 'Bạn đã được thêm vào nhóm',
+            updateAt: Date.now(),
+            lastUserSend,
         });
-        // console.log('new Contact:', newContacts);
-        this.create(newContacts);
     },
 };
 

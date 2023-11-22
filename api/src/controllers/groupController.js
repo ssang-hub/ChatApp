@@ -10,6 +10,7 @@ const createGroup = async (req, res) => {
         groupUsers: [...req.body.groupUsers, { _id: req.user._id }],
     };
     const newGroup = req.body.avatar ? { ...groupRequset, avatar: req.body.avatar } : groupRequset;
+    console.log(newGroup);
     try {
         const groupCreate = await groupModel.createGroup(newGroup);
         const { __v0, ...myGroup } = groupCreate.toJSON();

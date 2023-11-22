@@ -21,7 +21,11 @@ function Nav({ OptionNav, setOptionNav }) {
   useEffect(() => {
     const getMyInformation = async () => {
       try {
-        const { data } = await axiosPrivate.get(`/getInformation`);
+        const { data } = await axiosPrivate.get(`/myInfo`);
+        if (data.local) {
+          data.email = data.local.email;
+        }
+        console.log(data);
         setUserDetail(data);
       } catch (error) {
         console.log(error);
