@@ -4,7 +4,7 @@ This project is a web app for chat app that includes the features: Login/Resgist
 
 ## Prerequisites
 
-- Install [Node.js](https://nodejs.org/en/) version 16.x.x
+- Install [Node.js](https://nodejs.org/en/) version 18.x.x
 
 ## Installation & Configuration
 
@@ -30,7 +30,7 @@ cd client
 yarn install
 ```
 
-- Change 2  files `.env.sample` to `.env`
+- Change 2  files `example.env` to `.env`
 
 ## Running the Application
 
@@ -47,3 +47,30 @@ yarn dev
 cd client
 yarn start
 ```
+
+### Building and running your application with docker
+- Clone the repository
+
+```
+git clone  https://github.com/ssang-hub/ChatApp.git 
+```
+
+When you're ready, start your application by running:
+- Run server
+```
+cd api
+```
+```
+docker compose up --build
+```
+
+- Run client
+
+```
+cd client
+```
+```
+docker compose up --build
+```
+
+Your application will be available at http://localhost:3000.
