@@ -3,5 +3,3 @@
 .env
 /src/routes/test.js
 /test.http
-/src/public/images/avatars/*
-/src/public/images/message/*
