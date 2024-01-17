@@ -24,12 +24,7 @@ Contact.statics = {
         }
         try {
             if (messageData.lastUserSend) {
-                // console.log('update ở đây');
-                // const test = await this.updateMany(
-                //     { to: ObjectId(messageData.to) },
-                //     { content: content, updateAt: Date.now(), lastUserSend: messageData.lastUserSend },
-                // );
-                // console.log(test);
+             
             } else {
                 await this.findOneAndUpdate(
                     {

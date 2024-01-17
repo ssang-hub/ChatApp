@@ -7,7 +7,6 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const googleVerify = async (req, res, next) => {
     const { tokenId } = req.body;
     try {
-        // console.log(tokenId);
         const { payload } = await client.verifyIdToken({ idToken: tokenId, audience: process.env.GOOGLE_CLIENT_ID });
         const checkUser = await UserModel.SocialLogin(payload);
         const { accessToken, refreshToken } = authJWT.createNewToken(checkUser);

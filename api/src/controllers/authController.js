@@ -42,8 +42,6 @@ const mailVerify = async (email, codeNumber, option) => {
         };
         transporter.sendMail(message, (err, info) => {
             if (err) {
-                // console.log("Error occurred. " + err.message);
-                // process.exit(1);
                 return false;
             } else {
                 console.log('sendding,...');
@@ -52,7 +50,6 @@ const mailVerify = async (email, codeNumber, option) => {
             }
         });
     } catch (error) {
-        // console.log(error);
         return false;
     }
 };
