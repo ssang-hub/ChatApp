@@ -61,7 +61,7 @@ When you're ready, start your application by running:
 cd api
 ```
 ```
-docker compose up --build
+docker compose up 
 ```
 
 - Run client
@@ -70,7 +70,7 @@ docker compose up --build
 cd client
 ```
 ```
-docker compose up --build
+docker compose up 
 ```
 
 Your application will be available at http://localhost:3000.
