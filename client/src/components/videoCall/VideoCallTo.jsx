@@ -19,7 +19,6 @@ const VideoCall = () => {
     }
     const peer = new Peer();
     peer.on('open', (id) => {
-      console.log('Connected with Id: ' + id);
       navigator.getUserMedia(
         { video: true, audio: true },
         (stream) => {

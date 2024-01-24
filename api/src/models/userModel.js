@@ -18,9 +18,9 @@ const userSchema = new Schema({
     address: { type: String, default: null },
     avatar: {
         type: String,
-        default: `${process.env.DOMAIN}/images/randomAvatar/${Math.round(Math.random() * 39)}.svg`,
+        default: `${process.env.HOST}/images/randomAvatar/${Math.round(Math.random() * 39)}.svg`,
     },
-    coverAvatar: { type: String, default: `${process.env.DOMAIN}/images/imageCover.png` },
+    coverAvatar: { type: String, default: `${process.env.HOST}/images/imageCover.png` },
     socialAuth: { type: String, default: '' },
     groups: [],
     friends: [{ type: ObjectId, default: null }],

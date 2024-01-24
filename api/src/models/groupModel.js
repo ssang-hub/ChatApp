@@ -8,7 +8,7 @@ const groupSchema = new Schema({
     name: { type: String },
     groupUsers: [{ _id: ObjectId }],
     admin: { _id: ObjectId },
-    avatar: { type: String, default: `${process.env.DOMAIN}/images/group-default.png` },
+    avatar: { type: String, default: `${process.env.HOST}/images/group-default.png` },
 });
 
 groupSchema.statics = {

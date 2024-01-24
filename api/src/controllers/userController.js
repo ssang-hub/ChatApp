@@ -58,7 +58,6 @@ const searchUser = async (req, res) => {
                 }
             }
 
-            console.log(responseData);
             res.status(200).json(responseData);
         }
     } catch (error) {
@@ -87,7 +86,7 @@ const updateMyProfile = async (req, res) => {
 const getUserInfomation = async (req, res) => {
     // console.log(req.params.userId);
     try {
-        const user = await userModel.getUserInfomation(req.params.userId);
+        const user = await userModel.getMyInfo(req.params.userId);
         return res.status(200).json(user);
     } catch (error) {
         console.log(error);
