@@ -7,7 +7,6 @@ const groupSocketService = (socket) => {
         } catch (error) {
             console.log(error);
         }
-        // console.log(msg);
     });
     socket.on('add-users-to-group', async (msg) => {});
     socket.on('leave-group', async (msg) => {});

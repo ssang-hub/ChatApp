@@ -1,11 +1,8 @@
 import messageModel from '../models/messageModel';
-// import userModel from '../models/userModel';
 import ContactsModel from '../models/ContactModel';
 const addMessage = async (msg) => {
     try {
-        // console.log(req.file);
         const { __v, deleteAt, ...result } = await messageModel.createMessage(msg);
-        // console.log(result);
         const date = new Date(result.createdAt);
 
         const message = {
@@ -20,8 +17,6 @@ const addMessage = async (msg) => {
         };
         await ContactsModel.updateRecent(message);
         return message;
-
-        // return msg;
     } catch (error) {
         console.log(error);
     }

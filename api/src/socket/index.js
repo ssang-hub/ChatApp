@@ -8,11 +8,8 @@ import { getAllGroup } from '../service/ContactService';
 
 const service = (io, global) => {
     io.on('connection', (socket) => {
-        // socket.join("SangOcCho", "h18d52GzpWBeTVExAAAB");
-        // console.log(io.sockets.adapter.rooms);
         global.chatSocket = socket;
         socket.on('accountConnect', async (userId) => {
-            // console.log(userId);
             const groupIds = await getAllGroup(userId);
             for (let v of groupIds) {
                 socket.join(v._id.toString());

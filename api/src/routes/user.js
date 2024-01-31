@@ -10,7 +10,6 @@ import { checkEmailUpdate, checkImageUpload } from '../middleware/AccountMiddlew
 const upload = multer({ dest: 'src/public/images/avatars/' });
 const route = express.Router();
 
-// message api
 // route.post("/getAllMessages", messageController.getAllMessages);
 route.get('/getMessages', messageController.getMessages);
 route.get('/getGroupMessages', messageController.getGroupMessages);

@@ -17,7 +17,6 @@ const chatText = (socket) => {
         const msg = await messageService.addMessage(newMessage);
         if (sendUserSocket) {
             const messageEmit = data.userGroup ? { ...msg, userGroup: data.userGroup } : msg;
-            // console.log('msg emit: ', messageEmit);
             socket.to(sendUserSocket).except(senderId).emit('sticker-receive', messageEmit);
         }
     });

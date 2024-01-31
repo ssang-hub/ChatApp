@@ -11,7 +11,6 @@ const fiendSocketService = (socket) => {
         } catch (error) {
             console.log(error);
         }
-        // console.log(msg);
     });
 };
 export default fiendSocketService;

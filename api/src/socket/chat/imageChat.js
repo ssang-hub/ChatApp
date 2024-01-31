@@ -22,15 +22,6 @@ const ImageChat = (socket) => {
         } catch (error) {
             console.log(error);
         }
-        // console.log(data.content);
-        // console.log(data);
-        // const sendUserSocket = onlineUsers.get(data.to);
-        // writeFile("../../public/images/message/", data.content, (err) => {
-        //   console.log(err);
-        // });
-        // if (sendUserSocket) {
-        //   socket.to(sendUserSocket).emit("msg-recieve", data);
-        // }
     });
 };
 export default ImageChat;

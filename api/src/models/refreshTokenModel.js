@@ -15,8 +15,5 @@ refreshToken.statics = {
     findAndDeleteRefreshToken(token) {
         return this.findOneAndDelete({ info: token }).exec();
     },
-    // UpdateRefreshToken(refreshToken){
-    //   return this.findOneAndUpdate({in})
-    // }
 };
 export default mongoose.model('refreshTokens', refreshToken);
