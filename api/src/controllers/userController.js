@@ -56,7 +56,7 @@ const searchUser = async (req, res) => {
             res.status(200).json(responseData);
         }
     } catch (error) {
-        console.log(error);
+        res.status(404).json('Không tìm thấy người dùng');
     }
 };
 

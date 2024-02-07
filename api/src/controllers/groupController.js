@@ -53,7 +53,7 @@ const getUsersInGroup = async (req, res) => {
 const getCustomAvatarGroup = (req, res) => {
     const avatars = [];
     for (let i = 0; i < 12; i++) {
-        avatars.push({ avatar: `${process.env.AVATAR_GROUP_CUSTOM}/${i}.png` });
+        avatars.push({ avatar: `${process.env.HOST}/images/groupAvatarDefault/${i}.png` });
     }
     return res.status(200).json(avatars);
 };

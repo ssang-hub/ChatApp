@@ -91,7 +91,7 @@ userSchema.statics = {
         try {
             const myAccount = await this.findOne({ _id: myAccountId }, { friends: 1 });
             const users = await this.find(
-                { fullName: { $regex: '.*' + fullName + '.*' }, _id: { $nin: myAccount.friends } },
+                { fullName: { $regex: '.*' + fullName + '.*', $options: 'i' }, _id: { $nin: myAccount.friends } },
                 { local: 0, socialAuth: 0, friends: 0 },
             );
             return users;

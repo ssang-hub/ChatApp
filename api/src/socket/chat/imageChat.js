@@ -16,7 +16,7 @@ const ImageChat = (socket) => {
             await fs.writeFile(path.join(path.resolve(), 'src/public/images/message') + '/' + fileName, buffer);
 
             const { content, ...MessageData } = data;
-            MessageData.message = { type: 'image', content: `${process.env.IMAGE_FOLDER}/${fileName}` };
+            MessageData.message = { type: 'image', content: `${process.env.HOST}/images/message/${fileName}` };
             const msg = await messageService.addMessage(MessageData);
             socket.to(sender).emit('send-image-success', MessageData);
             socket.to(recieverUser).emit('image-receive', MessageData);
