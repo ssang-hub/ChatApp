@@ -118,7 +118,7 @@ function AddGroup({ user }) {
                   <div className="mx-3">
                     <img className={clsx(style.avatarDetail)} src={contact.avatar} alt="" />
                   </div>
-                  <h5 className="mx-3 d-flex align-items-center">{contact.userName}</h5>
+                  <h5 className="mx-3 d-flex align-items-center">{contact.fullName}</h5>
                 </div>
               ))}
             </div>

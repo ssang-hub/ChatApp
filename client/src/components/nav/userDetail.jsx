@@ -41,7 +41,6 @@ function UserDetail({ userDetail, setUserDetail }) {
       setUserDetail(result.data);
       setChangeMyProfile(result.data);
       dispatch(updateUser(result.data));
-      // console.log(result.data);
       setChangeState(false);
     } catch (error) {
       console.log(error);
@@ -112,7 +111,7 @@ function UserDetail({ userDetail, setUserDetail }) {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h4>{userDetail.userName}</h4>
+                  <h4>{userDetail.fullName}</h4>
                   <div className={style.infomationDetail}>
                     <h6 className="d-flex">Thông tin cá nhân</h6>
                     <div className="mt-4">

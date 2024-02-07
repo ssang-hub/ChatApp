@@ -31,7 +31,7 @@ function Header({ chatCurrent, user }) {
         <div>
           <img className={style.avatar} src={chatCurrent.avatar} alt="" />
         </div>
-        <h5 className="m-auto">{chatCurrent.userName}</h5>
+        <h5 className="m-auto">{chatCurrent.fullName}</h5>
       </div>
       <div className="d-flex justify-content-around">
         <div className={clsx('m-auto', [style['btn-header-chat']])} onClick={() => showInput()}>

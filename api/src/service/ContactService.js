@@ -28,7 +28,7 @@ const addFriend = async (msg) => {
 const addGroup = async (req, res) => {
     const user = req.user;
     const data = req.body.users;
-    const admin = { _id: user._id, userName: user.userName, avatar: user.image };
+    const admin = { _id: user._id, fullName: user.fullName, avatar: user.image };
     data.push(admin);
     const group = {
         name: req.body.name,
@@ -43,25 +43,13 @@ const addGroup = async (req, res) => {
     }
 };
 
-// //  add one user to group
-// const addUserToGroup = async (req, res) => {
-//     const admin = req.user;
-//     const user = req.body.users;
-//     const group = req.body.groupId;
-//     try {
-//         const result = await groupModel.addUser(group, user);
-//         res.json(result);
-//     } catch (error) {
-//         console.log('ERROR:', error);
-//     }
-// };
 const getAllGroup = async (userId) => {
     try {
         const groupIds = await groupModel.getAllIdGroup(userId);
         return groupIds;
-        // return res.status(200).json(result);
+        return res.status(200).json(result);
     } catch (error) {
-        // return res.status(403).json('not found');
+        return res.status(403).json('not found');
     }
 };
 export { addFriend, getAllGroup };

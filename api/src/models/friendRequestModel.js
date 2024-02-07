@@ -25,7 +25,7 @@ friendRequests.statics = {
             },
             { $match: { to: new ObjectId(userId) } },
             { $unwind: '$users' },
-            { $project: { 'users.userName': 1, 'users.avatar': 1 } },
+            { $project: { 'users.fullName': 1, 'users.avatar': 1 } },
         ]);
         return Requests;
     },

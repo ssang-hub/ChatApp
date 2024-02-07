@@ -129,7 +129,7 @@ function AddFriend({ user }) {
                       <div className="col-xl-3">
                         <img className={clsx([style.avatar])} src={item.avatar} alt="" />
                       </div>
-                      <div className="col-xl-5">{item.userName}</div>
+                      <div className="col-xl-5">{item.fullName}</div>
                       <div className="col-xl-3 p-1">
                         {item.pendingAccept ? (
                           <div className="btn btn-outline-danger h-100 w-120" onClick={() => CancelRequest(item._id)}>
@@ -156,7 +156,7 @@ function AddFriend({ user }) {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h4>{userData.userName}</h4>
+                  <h4>{userData.fullName}</h4>
                   <div className={style.infomationDetail}>
                     <h6 className="d-flex">Thông tin cá nhân</h6>
                     <div className="row mt-4">

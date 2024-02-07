@@ -7,7 +7,7 @@ const Contact = new Schema({
     to: { type: ObjectId },
     lastUserSend: {
         avatar: { type: String },
-        userName: { type: String },
+        fullName: { type: String },
     },
     content: { type: String },
     updateAt: { type: Date },
@@ -24,7 +24,6 @@ Contact.statics = {
         }
         try {
             if (messageData.lastUserSend) {
-             
             } else {
                 await this.findOneAndUpdate(
                     {

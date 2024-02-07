@@ -23,10 +23,6 @@ MessageSchema.statics = {
             .skip(pagenumber * 15)
             .limit(15);
     },
-    async getAllMessagesGroup(user, groupId) {
-        console.log(await groupModel.checkUserInGroups(user, groupId));
-        // if (groupModel.checkUserInGroups(user, groupId)) return this.find({ receiverId: groupId });
-    },
     async createMessage(data) {
         const result = await this.create({
             senderId: ObjectId(data.from),
@@ -51,7 +47,7 @@ MessageSchema.statics = {
             { $limit: 15 },
             { $skip: pagenumber * 15 },
             { $unwind: '$users' },
-            { $project: { 'users._id': 1, 'users.userName': 1, 'users.avatar': 1, message: 1, createdAt: 1 } },
+            { $project: { 'users._id': 1, 'users.fullName': 1, 'users.avatar': 1, message: 1, createdAt: 1 } },
         ]);
     },
 };

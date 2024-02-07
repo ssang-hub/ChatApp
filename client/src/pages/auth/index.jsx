@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
-import { authSelector } from '../../store/selectors';
 import axios from '../../api/axios';
 import clsx from 'clsx';
 
@@ -15,21 +14,19 @@ import { gapi } from 'gapi-script';
 import { ToastContainer, toast } from 'react-toastify';
 import style from './style.module.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import RecoveryPassWord from './RecoveryPassword';
 import { login } from '../../store/reducers/auth.slice';
 
 function Auth() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const authSelect = useSelector(authSelector);
   const [authOption, setAuthOption] = useState('login');
   const [user, setUser] = useState({
     accountName: '',
     password: '',
   });
-  const [recoveryEmail, setRecoveryEmail] = useState();
-  const [userRecovery, setUserRecovery] = useState();
-  const [onLoading, setOnLoading] = useState(false);
+  const [email, setEmail] = useState();
+  const [IsLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.getItem(process.env.REACT_APP_NAMEAPP)) {
@@ -40,60 +37,65 @@ function Auth() {
     });
   }, []);
 
-  // user, password
-  const Logged = (token) => {
-    dispatch(login({ ...token, user: jwtDecode(token.accessToken) }));
-  };
-
-  const LoginAction = async (event) => {
+  // handle login with account name and password
+  const hadleLogin = async (event) => {
     event.preventDefault();
     if (!(user.accountName && user.password)) {
       toast.error('Vui lòng nhập đầy đủ thông tin', { theme: 'dark', position: 'bottom-right' });
     } else {
       try {
-        setOnLoading(true);
-        const token = await axios.post('/login', { user });
-        // console.log('ok');
-        Logged(token.data);
-        localStorage.setItem(process.env.REACT_APP_NAMEAPP, JSON.stringify(token.data));
-        // navigate('/');
+        setIsLoading(true);
+        const { data } = await axios.post('/login', { user });
+        dispatch(login({ ...data, user: jwtDecode(data.accessToken) }));
+        localStorage.setItem(process.env.REACT_APP_NAMEAPP, JSON.stringify(data));
         window.location.reload();
       } catch (error) {
         error.response && error.response.status !== 403
           ? toast.error('Vui lòng nhập lại thông tin', { position: 'bottom-right', theme: 'dark' })
           : toast.error('Tài khoản hoặc mật khẩu không chính xác', { position: 'bottom-right', theme: 'dark' });
-        setOnLoading(false);
+        setIsLoading(false);
       }
     }
   };
 
-  const RegisterAction = async (event) => {
+  // handle login with google
+  const googleAuth = async (profileObj) => {
+    const { data } = await axios.post('/googleVerify', { tokenId: profileObj.tokenId });
+    dispatch(login({ ...data, user: jwtDecode(data.accessToken) }));
+    localStorage.setItem(process.env.REACT_APP_NAMEAPP, JSON.stringify(data.data));
+    navigate('/');
+  };
+
+  const responseGoogle = (response) => {
+    console.log(response);
+  };
+
+  const handleRegister = async (event) => {
     event.preventDefault();
-    // if()
-    if (!(user.userName && user.password && user.passwordConfirm && user.accountName)) {
+
+    if (!(user.fullName && user.password && user.passwordConfirm && user.accountName)) {
       toast.error('Vui lòng nhập đầy đủ thông tin', { theme: 'dark', position: 'bottom-right' });
     } else if (!(user.password === user.passwordConfirm)) {
       toast.error('Mật khẩu không khớp', { theme: 'dark', position: 'bottom-right' });
     } else {
       try {
-        setOnLoading(true);
+        setIsLoading(true);
         const result = await axios.post('/register', { user });
         if (result.status === 200) toast.success('Tạo tài khoản thành công', { position: 'bottom-right', theme: 'dark' });
-        setOnLoading(false);
+        setIsLoading(false);
       } catch (error) {
         error.response && error.response.status === 403 && toast.error('Tên tài khoản đã tồn tại', { position: 'bottom-right', theme: 'dark' });
-        setOnLoading(false);
+        setIsLoading(false);
       }
     }
   };
+
   const handleForgotPassword = async (event) => {
     event.preventDefault();
-    if (recoveryEmail) {
+    if (email) {
       try {
-        const result = await axios.post('/forgotPassword', { recoveryEmail });
-        if (result.status === 200) {
-          setUserRecovery({ id: result.data });
-        }
+        const { status } = await axios.post('/forgotPassword', { email });
+        status === 200 && toast.success('Vui lòng kiểm tra email', { position: 'bottom-right', theme: 'dark' });
       } catch (error) {
         error.response && error.response.status === 403 && toast.error('Không tìm thấy email đã nhập', { position: 'bottom-right', theme: 'dark' });
       }
@@ -105,17 +107,7 @@ function Auth() {
       return { ...prevState, [event.target.name]: event.target.value };
     });
   };
-  const googleAuth = async (profileObj) => {
-    const data = await axios.post('/googleVerify', { tokenId: profileObj.tokenId });
-    Logged(data.data);
-    localStorage.setItem(process.env.REACT_APP_NAMEAPP, JSON.stringify(data.data));
-    // window.location.reload();
-    navigate('/');
-  };
 
-  const responseGoogle = (response) => {
-    console.log(response);
-  };
   return (
     <div>
       <div className={clsx('container', [style['float-in']])}>
@@ -148,13 +140,13 @@ function Auth() {
               </div>
               {/*  */}
               {authOption !== 'forgot' ? (
-                <form onSubmit={authOption === 'login' ? LoginAction : RegisterAction} className={clsx(style.myform)}>
+                <form onSubmit={authOption === 'login' ? hadleLogin : handleRegister} className={clsx(style.myform)}>
                   <div className="form-group">
                     <input type="text" name="accountName" className={clsx('form-control', style.formInput)} onChange={(e) => changeValue(e)} placeholder="Tên tài khoản" required />
                   </div>
                   {authOption === 'register' && (
                     <div className="form-group">
-                      <input type="text" name="userName" className={clsx('form-control', style.formInput)} onChange={(e) => changeValue(e)} placeholder="Tên người dùng" required />
+                      <input type="text" name="fullName" className={clsx('form-control', style.formInput)} onChange={(e) => changeValue(e)} placeholder="Tên người dùng" required />
                     </div>
                   )}
                   <div className="form-group">
@@ -191,7 +183,7 @@ function Auth() {
                   <div className="form-group mt-3">
                     {authOption === 'login' ? (
                       <button type="submit" className={clsx(style.submitBtn, 'btn', 'btn-block', 'btn-primary', 'btn-lg')}>
-                        {onLoading ? (
+                        {IsLoading ? (
                           <div className="spinner-border text-primary" role="status">
                             <span className="visually-hidden">Loading...</span>
                           </div>
@@ -204,7 +196,7 @@ function Auth() {
                       </button>
                     ) : (
                       <button type="submit" className={clsx(style.submitBtn, 'btn', 'btn-block', 'btn-primary', 'btn-lg')}>
-                        {onLoading ? (
+                        {IsLoading ? (
                           <div className="spinner-border text-primary" role="status">
                             <span className="visually-hidden">Loading...</span>
                           </div>
@@ -227,7 +219,7 @@ function Auth() {
                         type="email"
                         placeholder="Email khôi phục"
                         onChange={(e) => {
-                          setRecoveryEmail(e.target.value);
+                          setEmail(e.target.value);
                         }}
                       />
                     </div>
@@ -254,13 +246,8 @@ function Auth() {
           </div>
         </div>
       </div>
-      {userRecovery ? (
-        <div>
-          <RecoveryPassWord userRecovery={userRecovery} setUserRecovery={setUserRecovery} /> <div className="modal-backdrop fade show"></div>
-        </div>
-      ) : (
-        <ToastContainer />
-      )}
+
+      <ToastContainer />
     </div>
   );
 }
