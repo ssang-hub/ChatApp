@@ -39,5 +39,4 @@ const getGroupMessages = async (req, res) => {
     }
 };
 
-const removeMessage = async (req, res) => {};
-export { removeMessage, getMessages, getGroupMessages };
+export { getMessages, getGroupMessages };

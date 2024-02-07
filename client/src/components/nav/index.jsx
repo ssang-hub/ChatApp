@@ -13,9 +13,6 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 function Nav({ OptionNav, setOptionNav }) {
   const [userDetail, setUserDetail] = useState();
   const dispatch = useDispatch();
-
-  // const [viewMyProfile, setViewMyProfile] = useState(false);
-  // const socket = useScoket()
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
@@ -25,18 +22,15 @@ function Nav({ OptionNav, setOptionNav }) {
         if (data.local) {
           data.email = data.local.email;
         }
-        console.log(data);
         setUserDetail(data);
       } catch (error) {
         console.log(error);
       }
     };
     getMyInformation();
-  }, []);
-
-  useEffect(() => {
     dispatch(getNumberRequest());
   }, []);
+
   const handleLogout = () => {
     localStorage.removeItem(process.env.REACT_APP_NAMEAPP);
     dispatch(lougout());

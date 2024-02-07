@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import clsx from 'clsx';
+import { useDispatch } from 'react-redux';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { updateUser } from '../../store/reducers/auth.slice';
+
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { AiOutlineCamera } from 'react-icons/ai';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import style from './style.module.scss';
-import clsx from 'clsx';
-import { updateUser } from '../../store/reducers/auth.slice';
-import { useDispatch } from 'react-redux';
 
 function UserDetail({ userDetail, setUserDetail }) {
   const [changeState, setChangeState] = useState(false);
-  const [changeMyProfile, setChangeMyProfile] = useState();
+  const [newUserInfo, setNewUserInfo] = useState();
   const axiosPrivate = useAxiosPrivate();
 
   // avatar user
   const [avatar, setAvatar] = useState(userDetail.avatar);
   const [coverAvatar, setCoverAvatar] = useState(userDetail.coverAvatar);
+  const [avatarFile, setAvatarFile] = useState(undefined);
+  const [coverAvatarFile, setCoverAvatarFile] = useState(undefined);
+
+  const [errorNotify, setErrorNotify] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -30,22 +36,31 @@ function UserDetail({ userDetail, setUserDetail }) {
   }, [coverAvatar]);
 
   const changeInfomation = (event) => {
-    setChangeMyProfile((prevState) => {
+    setNewUserInfo((prevState) => {
       return { ...prevState, [event.target.name]: event.target.value };
     });
   };
 
   const handleChangeProfile = async () => {
     try {
-      const result = await axiosPrivate.put('/updateMyProfile', changeMyProfile);
-      setUserDetail(result.data);
-      setChangeMyProfile(result.data);
-      dispatch(updateUser(result.data));
+      setIsLoading(true);
+      const { data } = await axiosPrivate.request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        method: 'PUT',
+        url: '/updateMyProfile',
+        data: { ...newUserInfo, avatar: avatarFile, coverAvatar: coverAvatarFile },
+      });
+      setUserDetail(data);
+      setNewUserInfo(data);
+      dispatch(updateUser(data));
       setChangeState(false);
+      setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      setErrorNotify('Cập nhật không thành công');
+      setIsLoading(false);
     }
   };
+
   return (
     <div>
       <div
@@ -88,7 +103,10 @@ function UserDetail({ userDetail, setUserDetail }) {
                             name="coverAvatar"
                             id="upload-cover-avatar"
                             className={style.uploadPhoto}
-                            onChange={(e) => setCoverAvatar(URL.createObjectURL(e.target.files[0]))}
+                            onChange={(e) => {
+                              setCoverAvatarFile(e.target.files[0]);
+                              setCoverAvatar(URL.createObjectURL(e.target.files[0]));
+                            }}
                           />
                         </div>
                       )}
@@ -102,7 +120,16 @@ function UserDetail({ userDetail, setUserDetail }) {
                               <AiOutlineCamera />
                             </div>
                           </label>
-                          <input type="file" name="avatar" id="upload-avatar" className={style.uploadPhoto} onChange={(e) => setAvatar(URL.createObjectURL(e.target.files[0]))} />
+                          <input
+                            type="file"
+                            name="avatar"
+                            id="upload-avatar"
+                            className={style.uploadPhoto}
+                            onChange={(e) => {
+                              setAvatarFile(e.target.files[0]);
+                              setAvatar(URL.createObjectURL(e.target.files[0]));
+                            }}
+                          />
                         </div>
                       ) : (
                         <img className={style.avatarDetail} src={avatar} alt="" />
@@ -168,16 +195,19 @@ function UserDetail({ userDetail, setUserDetail }) {
                             <td>Email:</td>
                             <td>
                               {changeState ? (
-                                <div>
-                                  <input
-                                    type="email"
-                                    name="email"
-                                    onChange={(e) => changeInfomation(e)}
-                                    className="form-control"
-                                    style={{ marginLeft: 20 }}
-                                    defaultValue={userDetail.email}
-                                  />
-                                </div>
+                                <>
+                                  <div>
+                                    <input
+                                      type="email"
+                                      name="email"
+                                      onChange={(e) => changeInfomation(e)}
+                                      className="form-control"
+                                      style={{ marginLeft: 20 }}
+                                      defaultValue={userDetail.email}
+                                    />
+                                  </div>
+                                  {errorNotify && <p class="text-danger">{errorNotify}</p>}
+                                </>
                               ) : (
                                 userDetail.email
                               )}
@@ -193,8 +223,8 @@ function UserDetail({ userDetail, setUserDetail }) {
 
             <div className="modal-footer">
               {changeState ? (
-                <button className="btn btn-outline-success" onClick={() => handleChangeProfile()}>
-                  Lưu lại
+                <button className="btn btn-outline-success" disabled={isLoading} onClick={() => handleChangeProfile()}>
+                  {isLoading ? <div className="spinner-border text-primary" role="status"></div> : 'Lưu lại'}
                 </button>
               ) : (
                 <button className="btn btn-outline-primary" onClick={() => setChangeState(true)}>

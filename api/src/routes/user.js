@@ -3,11 +3,10 @@ import * as userController from '../controllers/userController';
 import * as messageController from '../controllers/messageController';
 import * as authController from '../controllers/authController';
 import * as groupController from '../controllers/groupController';
-
+import { checkAvatarFile, checkEmailExists } from '../middleware/accountMiddleware';
 import multer from 'multer';
-// import { checkEmailUpdate, checkImageUpload } from '../middleware/AccountMiddleware';
 
-const upload = multer({ dest: 'src/public/images/avatars/' });
+const upload = multer({ dest: 'src/public/images/avatars/', limits: { fileSize: 1000000 } });
 const route = express.Router();
 
 route.get('/getMessages', messageController.getMessages);
@@ -31,7 +30,12 @@ route.post('/leaveGroup', groupController.leaveGroup);
 route.post('/searchUser', userController.searchUser);
 route.put(
     '/updateMyProfile',
-    // upload.single('file'), checkImageUpload,
+    upload.fields([
+        { name: 'avatar', maxCount: 1 },
+        { name: 'coverAvatar', maxCount: 1 },
+    ]),
+    checkAvatarFile,
+    checkEmailExists,
     userController.updateMyProfile,
 );
 

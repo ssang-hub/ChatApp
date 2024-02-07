@@ -2,7 +2,7 @@ import dotevn from 'dotenv';
 import jwt from 'jsonwebtoken';
 import userModel from '../models/userModel';
 import refreshTokenModel from '../models/refreshTokenModel';
-import * as authJWT from '../middleware/JsonWebToken';
+import * as authJWT from '../controllers/passport/JsonWebToken';
 import { mailVerify } from '../middleware/accountMiddleware';
 
 dotevn.config();
@@ -79,7 +79,7 @@ const forgotPassword = async (req, res) => {
         const token = jwt.sign(account.toJSON(), process.env.JWT_SECRET_KEY, {
             expiresIn: '3m',
         });
-        await mailVerify(req.body.email, `${process.env.RESET_PASSWORD_URL}/${token}`, 'forgotPassword');
+        await mailVerify(req.body.email, `${process.env.RESET_PASSWORD_URL}/${token}`);
         return res.status(200).json('password reset link sended to your email');
     } catch (error) {
         return res.status(403).json(false);

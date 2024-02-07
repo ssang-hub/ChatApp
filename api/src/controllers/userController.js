@@ -2,7 +2,6 @@ import userModel from '../models/userModel';
 import friendRequestModel from '../models/friendRequestModel';
 import ContactModel from '../models/ContactModel';
 import groupModel from '../models/groupModel';
-// import { mailVerify } from './authController';
 
 // Create new Group Chat
 
@@ -62,7 +61,6 @@ const searchUser = async (req, res) => {
 
 const updateMyProfile = async (req, res) => {
     try {
-        // console.log(req.body);
         const result = await userModel.findOneAndUpdate(
             { _id: req.user._id },
             { ...req.body, 'local.email': req.body.email },

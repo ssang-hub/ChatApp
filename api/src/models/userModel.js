@@ -143,5 +143,9 @@ userSchema.statics = {
             console.log(error);
         }
     },
+
+    findUserByEmail(email) {
+        return this.find({ 'local.email': email }, { id: 1 }).exec();
+    },
 };
 export default mongoose.model('users', userSchema);
