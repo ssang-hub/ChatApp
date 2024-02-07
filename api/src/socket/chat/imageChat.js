@@ -1,15 +1,16 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { HmacSHA256 } from 'crypto-js';
-import * as messageService from '../../service/messageService';
 import dotenv from 'dotenv';
-dotenv.config();
 import { v4 as uuidv4 } from 'uuid';
+import * as messageService from '../../service/messageService';
+dotenv.config();
+
 const ImageChat = (socket) => {
     socket.on('send-image', async (data) => {
         try {
-            const recieverUser = onlineUsers.get(data.to); //undefined
-            const sender = onlineUsers.get(data.from); //undefined
+            const recieverUser = onlineUsers.get(data.to);
+            const sender = onlineUsers.get(data.from);
+
             const buffer = Buffer.from(data.content, 'base64');
             const fileName = uuidv4().toString();
             await fs.writeFile(path.join(path.resolve(), 'src/public/images/message') + '/' + fileName, buffer);
@@ -24,4 +25,5 @@ const ImageChat = (socket) => {
         }
     });
 };
+
 export default ImageChat;

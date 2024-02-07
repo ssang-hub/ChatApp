@@ -42,14 +42,14 @@ function Contact({ setChatCurrent, myContacts, user, setMessages }) {
             <div>
               <img src={item.contact ? item.contact.avatar : item.avatar} className={style.avatar} alt="" />
             </div>
-            <div className={clsx('text-light', 'd-flex', 'pt-2', 'px-2')}>{item.contact ? item.contact.userName || item.contact.name : item.name}</div>
+            <div className={clsx('text-light', 'd-flex', 'pt-2', 'px-2')}>{item.contact ? item.contact.fullName || item.contact.name : item.name}</div>
             <div className="text-secondary p-2" style={{ marginLeft: 40 }}>
               {item.contact && !item.contact.isFriend && !item.contact.admin && 'Người lạ'}
             </div>
           </div>
           {item.contact && (
             <div className="d-flex text-light" style={{ marginLeft: 10, marginTop: 10 }}>
-              {item.fromSelf ? <span>Bạn: </span> : <span>{item.users ? item.users.userName : item.contact.userName.split(' ')[1]}: </span>}
+              {item.fromSelf ? <span>Bạn: </span> : <span>{item.users ? item.users.fullName : item.contact.fullName.split(' ')[1]}: </span>}
               <p style={{ marginLeft: 5 }}>{item.content}</p>
             </div>
           )}

@@ -1,9 +1,11 @@
 import { OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv';
-dotenv.config();
 import UserModel from '../models/userModel';
 import * as authJWT from '../middleware/JsonWebToken';
+
+dotenv.config();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 const googleVerify = async (req, res, next) => {
     const { tokenId } = req.body;
     try {

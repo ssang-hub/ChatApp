@@ -17,7 +17,7 @@ export const friendRemainingSelector = (state) => {
     return friends;
   }
   return friends.filter((friend) => {
-    if (friend.userName.includes(state.contacts.filter)) {
+    if (friend.fullName.includes(state.contacts.filter)) {
       return friend;
     }
   });
@@ -31,8 +31,8 @@ export const contactSearchSelector = (state) => {
     return recent;
   }
   return recent.filter((item) => {
-    if (item.contact.userName) {
-      if (item.contact.userName.includes(state.contacts.sidebarFilter)) return item;
+    if (item.contact.fullName) {
+      if (item.contact.fullName.includes(state.contacts.sidebarFilter)) return item;
     } else if (item.contact.name) {
       if (item.contact.name.includes(state.contacts.sidebarFilter)) return item;
     } else if (item.name.includes(state.contacts.sidebarFilter)) return item;

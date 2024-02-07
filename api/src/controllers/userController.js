@@ -11,7 +11,7 @@ const formatDateString = (date) => {
     return `${DOB.getDate()}-${DOB.getMonth() + 1}-${DOB.getFullYear()}`;
 };
 
-// get information myself
+// get information
 const getMyInfo = async (req, res) => {
     try {
         const result = await userModel.getMyInfo(req.user._id);
@@ -31,11 +31,6 @@ const getAllFriend = async (req, res) => {
     }
 };
 
-const getAllUser = async (req, res) => {
-    const result = await userModel.getAllUser();
-    res.json(result);
-};
-
 const searchUser = async (req, res) => {
     try {
         const resultSearchUser = await userModel.searchUsers(req.body.friend, req.user._id);
@@ -51,7 +46,7 @@ const searchUser = async (req, res) => {
                 if (v._id.toString() !== req.user._id.toString()) {
                     responseData.push({
                         _id: v._id,
-                        userName: v.userName,
+                        fullName: v.fullName,
                         avatar: v.avatar,
                         pendingAccept: requestData.includes(v._id.toString()),
                     });
@@ -73,7 +68,7 @@ const updateMyProfile = async (req, res) => {
             { ...req.body, 'local.email': req.body.email },
             {
                 new: true,
-                projection: '_id userName DOB gender phone address avatar coverAvatar',
+                projection: '_id fullName DOB gender phone address avatar coverAvatar',
             },
         );
 
@@ -177,7 +172,7 @@ const getContacts = async (req, res) => {
         });
         return res.status(200).json(contacts);
     } catch (error) {
-        console.log(error);
+        return res.status(408).json('Request timeout');
     }
 };
 
@@ -186,7 +181,6 @@ export {
     getAllFriend,
     getNumberRequest,
     getMyInfo,
-    getAllUser,
     searchUser,
     updateMyProfile,
     getUserInfomation,

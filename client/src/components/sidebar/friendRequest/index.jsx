@@ -52,7 +52,7 @@ function FriendRequest() {
                 <img className={clsx(style.avatarNotify)} src={Request.users.avatar} alt="" />
               </div>
               <div className="mx-2">
-                <h5 className="font-weight-bold d-inline">{Request.users.userName} </h5>
+                <h5 className="font-weight-bold d-inline">{Request.users.fullName} </h5>
                 <div style={{ fontSize: 15 }} className="text-left d-inline">
                   Đã gửi lời kết bạn cho bạn. Hãy đồng ý để trở thành bạn bè
                 </div>

@@ -57,7 +57,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
     socket.current.emit('send-sticker', {
       from: user._id,
       to: chatCurrent._id,
-      userGroup: chatCurrent.admin ? { avatar: user.avatar, userName: user.userName } : undefined,
+      userGroup: chatCurrent.admin ? { avatar: user.avatar, fullName: user.fullName } : undefined,
       content: stickerItem.url,
     });
     updateContactRecents(chatCurrent._id, 'Đã gửi một Sticker', true);
@@ -71,7 +71,7 @@ function ChatInput({ updateContactRecents, chatCurrent, user, setMessagesChatCur
       let message = {
         from: user._id,
         message: { type: 'text', content: messageInput },
-        userGroup: chatCurrent.admin ? { avatar: user.avatar, userName: user.userName } : undefined,
+        userGroup: chatCurrent.admin ? { avatar: user.avatar, fullName: user.fullName } : undefined,
         to: chatCurrent._id,
       };
       socket.current.emit('send-msg', message);

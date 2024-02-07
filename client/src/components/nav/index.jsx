@@ -37,7 +37,7 @@ function Nav({ OptionNav, setOptionNav }) {
   useEffect(() => {
     dispatch(getNumberRequest());
   }, []);
-  const logoutAction = () => {
+  const handleLogout = () => {
     localStorage.removeItem(process.env.REACT_APP_NAMEAPP);
     dispatch(lougout());
     window.location.reload();
@@ -56,7 +56,7 @@ function Nav({ OptionNav, setOptionNav }) {
                   </button>
                   <ul className={clsx([style['user-menu']], 'dropdown-menu')}>
                     <li>
-                      <h5 className="px-3">{userDetail.userName}</h5>
+                      <h5 className="px-3">{userDetail.fullName}</h5>
                     </li>
                     <hr />
                     <li className={style.hoverOptionBtn}>
@@ -71,7 +71,7 @@ function Nav({ OptionNav, setOptionNav }) {
                     </li>
                     <hr />
                     <li>
-                      <div className={style.logoutBtn} onClick={(e) => logoutAction(e)}>
+                      <div className={style.logoutBtn} onClick={(e) => handleLogout(e)}>
                         Đăng xuất
                       </div>
                     </li>

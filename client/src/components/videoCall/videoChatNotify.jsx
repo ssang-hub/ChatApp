@@ -51,7 +51,7 @@ function VideoChatNotify({ chatVideoNotifydata, socketCurrent, fromSelf, setChat
                 )}
               </div>
               <div>
-                {!fromSelf ? <h3 className="text-light">{chatVideoNotifydata.Callfrom.userName} đang gọi cho bạn</h3> : <h3>Bạn đang gọi {fromSelf.userName}</h3>}
+                {!fromSelf ? <h3 className="text-light">{chatVideoNotifydata.Callfrom.fullName} đang gọi cho bạn</h3> : <h3>Bạn đang gọi {fromSelf.fullName}</h3>}
                 <div className="text-light">Cuộc gọi sẽ bắt đầu ngay khi được chấp nhận</div>
               </div>
               <div className="my-3">
